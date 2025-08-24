@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% from "_macros.html" import weather_icon %}
+{% block title %}Weather — {{ city }}, {{ country }}{% endblock %}
+{% block body_class %}{{ image_type }} theme-{{ theme_group }}{% endblock %}
+
+{% block content %}
+<div class="right_box">
+  <header class="gernal-info">
+    <h1 class="title_words">{{ city }}, {{ country }}</h1>
+    <h2 class="temp_text_title"><strong>{{ temperature }}</strong></h2>
+
+    <form method="POST" action="/get_weather" class="temp-toggle-form">
+      <input type="hidden" name="city" value="{{ city }}">
+      <input type="hidden" name="country" value="{{ country }}">
+      <input type="hidden" name="temp_type" value="{{ 'f' if temp_type == 'c' else 'c' }}">
+      <button type="submit" class="toggle-btn" aria-label="Toggle temperature units">
+        <span class="{{ 'active' if temp_type == 'c' else '' }}">°C</span>
+        <span class="toggle-arrow">⇆</span>
+        <span class="{{ 'active' if temp_type == 'f' else '' }}">°F</span>
+      </button>
+    </form>
+
+    <div class="sun-box">
+      <p><i class="fa-solid fa-sun" aria-hidden="true"></i> Sunrise: {{ sunrise }}</p>
+      <p><i class="fa-solid fa-moon" aria-hidden="true"></i> Sunset: {{ sunset }}</p>
+    </div>
+  </header>
+
+  <div class="mini-title-box"><h4>The Upcoming Forecast</h4></div>
+
+  <section class="weekly_forcast_box" aria-label="7-day forecast">
+    {% for day in weekly_forcast %}
+      {% set desc = weathercode_map.get(day.weathercode, 'Unknown') %}
+      <div class="day_in_a_week_box">
+        <div class="weather_icon_box_daily">{{ weather_icon(desc) }}</div>
+        <div class="weekly_words_box">
+          <div class="day_in_a_week_box_words">
+            {{ day.month_day_full }}<br>
+            <span>{{ desc }}</span>
+          </div>
+        </div>
+        <div class="temp_box_weekly">
+          <p class="temp_text_max_min">
+            {% if temp_type == 'f' %}
+              {{ day.temperature_2m_max }}°F<br>{{ day.temperature_2m_min }}°F
+            {% else %}
+              {{ day.temperature_2m_max }}°C<br>{{ day.temperature_2m_min }}°C
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+</div>
+
+<section class="forecast_container" aria-label="Hourly forecast">
+  {% set today_date = hourly_forecast[0].date %}
+  {% for h in hourly_forecast %}
+    <div class="forecast-box" tabindex="0">
+      <p class="forecast_label">{{ "Today" if h.date == today_date else "Tomorrow" }}</p>
+      <h3>{{ h.display_hour }}</h3>
+      <div class="weather-icon">{{ weather_icon(h.desc) }}</div>
+      <p>{{ h.temp }}</p>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const boxes = document.querySelectorAll('.forecast-box');
+    boxes.forEach(b => {
+      b.addEventListener('click', () => {
+        boxes.forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+      });
+      b.addEventListener('blur', () => b.classList.remove('active'));
+      b.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { b.click(); }
+      });
+    });
+  });
+</script>
+{% endblock %}

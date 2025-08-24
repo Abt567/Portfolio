@@ -1,0 +1,24 @@
+{% macro weather_icon(desc) -%}
+  {% set d = (desc or '')|lower %}
+  {% if 'clear' in d %}
+    <i class="fa-solid fa-sun" aria-label="Clear"></i>
+  {% elif 'light drizzle' in d %}
+    <i class="fa-solid fa-cloud" aria-label="Drizzle"></i>
+  {% elif 'moderate drizzle' in d or 'dense drizzle' in d %}
+    <i class="fa-solid fa-cloud-showers-heavy" aria-label="Drizzle"></i>
+  {% elif 'freezing drizzle' in d or 'freezing rain' in d %}
+    <i class="fa-solid fa-snowflake" aria-label="Freezing"></i>
+  {% elif 'rain' in d %}
+    <i class="fa-solid fa-cloud-showers-heavy" aria-label="Rain"></i>
+  {% elif 'snow' in d or 'freezing' in d %}
+    <i class="fa-solid fa-snowflake" aria-label="Snow"></i>
+  {% elif 'cloud' in d %}
+    <i class="fa-solid fa-cloud" aria-label="Cloudy"></i>
+  {% elif 'thunder' in d %}
+    <i class="fa-solid fa-bolt" aria-label="Thunder"></i>
+  {% elif 'mist' in d or 'fog' in d or 'smog' in d or 'haze' in d %}
+    <i class="fa-solid fa-smog" aria-label="Fog"></i>
+  {% else %}
+    <i class="fa-solid fa-question" aria-label="Unknown"></i>
+  {% endif %}
+{%- endmacro %}

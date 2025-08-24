@@ -1,0 +1,104 @@
+/* === Base Page Styling === */
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: 'Inter', sans-serif;
+    background-image: url("/static/img/plant_shadow.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* === Title === */
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+}
+
+/* === Form Container === */
+form {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding-top: 0px;
+    padding-right: 40px;
+    padding-bottom: 30px;
+    padding-left: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+/* === Input Fields and Dropdown === */
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 12px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* === Buttons === */
+button[type="submit"] {
+    width: 100%;
+    background-color: #007BFF;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* === Toggle Buttons (C / F) === */
+.toggle-container {
+    margin-top: 10px;
+}
+
+.toggle-container button {
+    width: 48%;
+    margin: 5px 1%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #ccc;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.toggle-container button.active {
+    background-color: #007BFF;
+    color: white;
+}
+
+/* === Error Message === */
+.error {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.error-message {
+  font-weight: 800px ! important;
+}
+
+h4 {
+  font-size: 18px;
+  color: #000000;
+  margin: 5px;
+}

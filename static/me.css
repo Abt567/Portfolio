@@ -1,0 +1,829 @@
+body.clearcase {
+  background-image: url('/static/img/clearcase.jpg');
+
+}
+
+body.cloudycase {
+  background-image: url('/static/img/cloudycase.jpg');
+}
+
+body.coldcase {
+  background-image: url('/static/img/coldcase.jpg');
+}
+
+body.sunrisecase,
+body.sunsetcase {
+  background-image: url('/static/img/sunsetcase.jpg');
+}
+
+
+body.foggycase {
+  background-image: url('/static/img/foggycase.jpg');
+}
+
+
+body.raincase {
+  background-image: url('/static/img/raincase.jpg');
+}
+
+body.snowycase {
+  background-image: url('/static/img/snowycase.jpg');
+}
+
+body.sunnycase {
+  background-image: url('/static/img/sunnycase.jpg');
+}
+
+body.mooncase {
+  background-image: url('/static/img/mooncase.jpg');
+  color: #fff;
+}
+
+.theme-polarseasoncase {
+    background: linear-gradient(to bottom, #001d3d, #003566, #5d8aa8);
+    color: white;
+}
+
+
+
+body.defaultcase {
+  background-image: url('/static/img/defaultcase.jpg');
+}
+
+body.clearcase,
+body.cloudycase,
+body.coldcase,
+body.sunrisecase,
+body.sunsetcase,
+body.foggycase,
+body.raincase,
+body.snowycase,
+body.sunnycase,
+body.mooncase,
+body.defaultcase {
+  min-height: 100vh;                  /* ✅ Fills full screen height */
+  background-size: cover;             /* ✅ Stretches image */
+  background-repeat: no-repeat;       /* ✅ No tiling */
+  background-attachment: scroll;      /* ✅ Scrolls with page */
+  background-position: center center; /* ✅ Keeps centered */
+
+}
+/* Apply fonts globally */
+body {
+  font-family: sans-serif;
+}
+
+/* Use Poppins specifically for larger titles */
+h1, h2, h3, h4, h5, .title_words, .mini-title-box h4 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 30;
+}
+
+
+/* ========================================
+rigth side boxes 
+======================================== */
+
+
+
+
+
+.right_box {
+    width: 320px;
+    height: 100vh;           
+    position: fixed;
+    right: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.3); /* Optional: to see content clearer */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+}
+
+
+
+.gernal-info{
+    width: 100%;
+    height: 28%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    padding-top: 10px;
+    text-align: center;
+}
+
+
+.sun-box{
+    width: 50%;
+    height: 30%;
+    margin-top: -15%;
+    line-height: 90%;
+    text-align: center;
+}
+
+.mini-title-box {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 50px;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  position: relative; /* Needed for positioning the line */
+  padding-bottom: 7px;
+}
+
+.mini-title-box::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  width: 70%;  /* 👈 controls the line's length */
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+
+.weekly_forcast_box{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    padding-top: 0;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 100;  
+
+}
+
+.right_box,
+.weekly_forcast_box {
+  box-sizing: border-box;
+}
+
+.day_in_a_week_box{
+    width: 100%;
+    height: 8%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4); /* light, semi-transparent */
+}
+
+.weather_icon_box_daily, .temp_box_weekly  {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    justify-content: center;
+}
+
+
+
+.weekly_words_box{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    justify-content: center;
+}
+
+/* ========================================
+hornintal forcast card boxes 
+======================================== */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.weather-icon {
+  width: 50%;              /* or any % you need */
+  aspect-ratio: 1;         /* keep it square */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5.5vh;          /* ✨ this is the magic */
+}
+
+.weather-icon i {
+  line-height: 0;          /* removes vertical spacing */
+}
+.forecast_container {
+  position: fixed;
+  bottom: 7px;
+  width: calc(100vw - 345px);
+  height: 190px;
+  color: #000;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 9999;
+  overflow-x: auto;
+  padding: 10px;
+  gap: 10px;
+  padding-bottom: 13px;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.forecast_container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.forecast_container {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+  overflow-x: auto;            /* Allow scrolling */
+}
+
+.forecast-box{
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 16px;
+  color: #ececec;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 30%;
+  height: 90%;
+  padding: 10px 12px;
+  min-width: 105px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+}
+
+
+
+
+/* ========================================
+ Responsive design for mobile devices 
+======================================== */
+@media (max-width: 768px) and (pointer: coarse) {
+  .right_box {
+    width: 100vw;
+    position: relative;       /* NOT fixed */
+    height: auto;             /* Let it grow with content */
+    z-index: 1;
+    padding: 10px;
+    padding-top:0px ;
+    padding-bottom: 0px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4); /* light, semi-transparent */
+    overflow-x: hidden;
+    
+  }
+    html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .forecast_container {
+    position: relative;       /* Stack it after right_box */
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: row;   /* Show forecast cards vertically */
+    overflow-y: auto;         /* Allow vertical scroll */
+    overflow-x: auto;
+    padding: 10px;
+    gap: 10px;
+    border: none;
+    z-index: 0;
+  }
+
+  html, body {
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+  }
+
+  .forecast-box{
+    background: rgba(0, 0, 0, 0.22);
+    border-radius: 16px;
+    color: #ececec;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    padding: 10px 12px;
+    min-width: 105px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  }
+
+  .day_in_a_week_box{
+    width: 105%;
+    height: 15%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4); /* light, semi-transparent */
+  }
+
+  .forecast-box {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .forecast-box:active {
+    transform: scale(1.05); /* slight zoom on tap */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3); /* subtle glow */
+    z-index: 10;
+  }
+
+  .gernal-info {
+    padding-top: 0;
+  }
+
+  .weekly_forcast_box{
+    border: 2px #000;
+  }
+  
+  .day_in_a_week_box:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+ 
+  .weather_icon_box_daily{
+    font-size: 3vh;          /* control the size of the image weekly one  */
+
+  }
+
+  .weather-icon {
+    font-size: 4.2vh;          /* the forcast box controls the image size */
+  }
+
+  .toggle-btn{
+    bottom: 455px !important;
+    right: 10px !important;
+  }
+
+
+  }
+
+
+  
+
+
+
+.theme-dark_and_soft .right_box {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+/* Example override */
+.theme-dark_and_soft .title_words {
+  color: #fdfdfd;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+
+
+/* ========================================
+    words
+======================================== */
+.title_words {
+  text-align: center;
+  color: rgb(0, 0, 0);
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 35px;
+  font-weight: 30px;
+  padding-bottom: 10px;
+  margin-top: 3px;
+}
+
+
+
+/* p is for the temp in the foercast box */
+
+
+p{
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  color: rgb(0, 0, 0);
+}
+
+
+
+
+
+/* h3 is for the time forcast card  */
+h3{
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+
+.day_in_a_week_box_words{
+  text-align: center;
+  white-space: nowrap;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+} 
+
+.temp_text_title {
+  text-align: center;
+  color: rgb(0, 0, 0);
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 55px;
+  font-weight: bold;
+  margin-top: -30px;
+}
+
+.temp_text_max_min{
+  text-align: right;
+  line-height: normal;
+}
+/* check with tem kind you like*/
+.temp_text_max_min {
+  text-align: right;
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;  /* Optional: scale for readability */
+  color: #fff;        /* Adjust to match theme */
+}
+
+.forecast_label {
+  text-align: center;        /* Optional: center the label */
+  margin: 0;                 /* Prevent extra space */
+  padding: 0;                /* Prevent unwanted push */
+  color: #000;               /* Match your default text color */
+  line-height: 1.4; 
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  color: rgb(0, 0, 0);
+}
+
+
+
+h4 {
+  margin: 0;
+  padding: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+
+
+
+
+/* ========================================
+theme groups design 
+======================================== */
+
+
+
+/* ========================================
+   DARK AND SOFT THEME (Optimized)
+======================================== */
+
+.theme-dark_and_soft {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: white;
+}
+
+/* Text shadows and tone */
+.theme-dark_and_soft,
+.theme-dark_and_soft h1,
+.theme-dark_and_soft h2,
+.theme-dark_and_soft h3,
+.theme-dark_and_soft h4,
+.theme-dark_and_soft p,
+.theme-dark_and_soft span {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Right box panel */
+.theme-dark_and_soft .right_box {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Title (City, Country) */
+.theme-dark_and_soft .title_words {
+  color: #fdfdfd !important;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+/* Main temperature */
+.theme-dark_and_soft .temp_text_title {
+  color: #ffffff !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Sunrise/Sunset */
+.theme-dark_and_soft .sun-box {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Section title */
+.theme-dark_and_soft .mini-title-box h4 {
+  color: #e0e0e0;
+}
+
+/* Day + weather text */
+.theme-dark_and_soft .day_in_a_week_box_words {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.theme-dark_and_soft .weather_description {
+  color: rgba(240, 240, 240, 0.88);
+}
+
+/* Max/Min temperatures */
+.theme-dark_and_soft .temp_text_max_min {
+  color: #fff;
+}
+
+/* Today / Tomorrow label */
+.theme-dark_and_soft .forecast_label {
+  color: #cccccc;;
+}
+
+/* Hourly forecast cards */
+.theme-dark_and_soft .forecast-box {
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(2.5px);
+  color: #ececec;
+}
+
+/* Active state (tap) */
+.theme-dark_and_soft .forecast-box.active {
+  transform: scale(1.12);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  z-index: 10;
+}
+
+/* Temperature text in hourly forecast */
+.theme-dark_and_soft .forecast-box p:last-child {
+  color: #ffffff;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+
+/* ============================
+   SNOW THEME STYLING
+============================ */
+/* === Main Right Panel Glassmorphism === */
+.theme-snowtype .right_box {
+  background: rgba(20, 20, 20, 0.48);
+  backdrop-filter: blur(14px);
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.4);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* === Title + Temperature === */
+.theme-snowtype .title_words,
+.theme-snowtype .temp_text_title {
+  color: #fff;
+  font-weight: 800;
+  text-shadow: 0 2px 7px rgba(0, 0, 0, 0.65);
+}
+
+.theme-snowtype .temp_text_title {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* === Sunrise / Sunset / Paragraphs === */
+.theme-snowtype .sun-box,
+.theme-snowtype .right_box p,
+.theme-snowtype .right_box h4 {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* === Forecast Text Styling (Global) === */
+.theme-snowtype p,
+.theme-snowtype li,
+.theme-snowtype span {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-weight: 400;
+}
+
+/* === Weekly Forecast Boxes === */
+.theme-snowtype .weather_icon_box_daily {
+  color: #fff;
+}
+
+.theme-snowtype .day_in_a_week_box_words {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 500;
+}
+
+.theme-snowtype .day_in_a_week_box_words span {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 400;
+}
+
+.theme-snowtype .temp_text_max_min {
+  color: #fff !important;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* === Hourly Forecast Box (Glass style) === */
+.theme-snowtype .forecast-box {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  backdrop-filter: blur(6px);
+  color: #fff;
+}
+
+.theme-snowtype .forecast-box.active {
+  background: rgba(0, 0, 0, 0.62);
+  box-shadow: 0 0 0 3px #fff, 0 4px 20px rgba(0, 0, 0, 0.55);
+}
+
+.theme-snowtype .forecast-box .weather-icon {
+  color: #fff;
+}
+
+.theme-snowtype .forecast-box p {
+  color: #fff !important;
+  font-weight: 500;
+}
+
+.theme-snowtype .forecast-box p:last-child {
+  color: #ffffff;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.theme-snowtype .forecast-box h3 {
+  color: #fff;
+  font-weight: 700;
+}
+
+.theme-snowtype .forecast_label {
+  color: #fff;
+  font-weight: 400;
+  opacity: 0.82;
+}
+
+/* ============================
+   Theme-special-case for mooon-image
+============================ */
+
+/* === Title + Temperature === */
+.theme-special_case .title_words,
+.theme-special_case .temp_text_title,
+.theme-special_case .temp_text_max_min {
+  color: #fdfdfd !important;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+  letter-spacing: 0.3px;
+}
+
+/* === Right Panel Glass Effect === */
+.theme-special_case .right_box {
+  background: linear-gradient(to bottom right, rgba(10, 10, 10, 0.65), rgba(20, 20, 20, 0.5));
+  backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: -4px 0 18px rgba(0, 0, 0, 0.4);
+  color: #eeeeee;
+}
+
+/* === Forecast Boxes (Glass Tiles) === */
+.theme-special_case .forecast-box,
+.theme-special_case .forecast-tile {
+  background-color: rgba(30, 30, 30, 0.55);
+  color: #f2f2f2;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+}
+
+/* === Labels, Subheadings, Small Text === */
+.theme-special_case .section-title,
+.theme-special_case .label,
+.theme-special_case .small-text {
+  color: #cccccc;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+/* === Global Text Tint (Moon Theme) === */
+.theme-special_case,
+.theme-special_case * {
+  color: #d8d8d8 !important;
+}
+
+/* === Headings === */
+.theme-special_case h1,
+.theme-special_case h2,
+.theme-special_case h3 {
+  color: #b0acad !important;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.theme-special_case .weather_icon_box_daily i {
+  color: #ffffff !important;
+}
+
+.temp-toggle-form {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.toggle-btn {
+  background: #1e1e1e;
+  border: 2px solid #ffffff88;
+  border-radius: 25px;
+  padding: 6px 14px;
+  font-size: 1em;
+  cursor: pointer;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.3s;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+
+
+
+.toggle-btn:hover {
+  background: #292929;
+}
+
+.toggle-btn .active {
+  font-weight: bold;
+  color: #FFD700;
+}
+
+.toggle-arrow {
+  font-size: 1.1em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ========================================
+theme groups design 
+======================================== */
+
+
+

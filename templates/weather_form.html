@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Search Weather{% endblock %}
+{% block content %}
+<section class="starter">
+  <h1>Weather Today</h1>
+  <form action="/get_weather" method="POST" class="search-form">
+    <label>
+      City
+      <input name="city" placeholder="e.g., Calgary" required>
+    </label>
+    <label>
+      Country Code
+      <input name="country" placeholder="e.g., CA" required>
+    </label>
+
+    <input type="hidden" id="temp_type" name="temp_type" value="c">
+
+    <div class="toggle">
+      <button type="button" id="btn-c" class="active" onclick="setTempType('c')" aria-pressed="true">°C</button>
+      <button type="button" id="btn-f" onclick="setTempType('f')" aria-pressed="false">°F</button>
+    </div>
+
+    <button type="submit">Get Weather</button>
+  </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  let currentTemp = 'c';
+  function setTempType(t){
+    currentTemp = t;
+    document.getElementById('temp_type').value = t;
+    document.getElementById('btn-c').classList.toggle('active', t==='c');
+    document.getElementById('btn-f').classList.toggle('active', t==='f');
+    document.getElementById('btn-c').setAttribute('aria-pressed', t==='c');
+    document.getElementById('btn-f').setAttribute('aria-pressed', t==='f');
+  }
+  window.onload = () => setTempType('c');
+</script>
+{% endblock %}

@@ -1,0 +1,6 @@
+Flask
+requests
+python-dotenv
+pytz
+timezonefinder
+gunicorn

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Choose Location{% endblock %}
+{% block content %}
+<div class="plant_shadow">
+  <div class="search-form">
+    <h1>Which {{ city_query }}?</h1>
+    <p class="error-message">Select the correct city below:</p>
+
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:center; width:100%;">
+      {% for c in candidates %}
+        <form action="{{ url_for('get_weather_page') }}" method="POST" style="width:100%; max-width:420px;">
+          <input type="hidden" name="lat" value="{{ c.lat }}">
+          <input type="hidden" name="lon" value="{{ c.lon }}">
+          <input type="hidden" name="picked_name" value="{{ c.name }}">
+          <input type="hidden" name="picked_state" value="{{ c.state }}">
+          <input type="hidden" name="picked_country" value="{{ c.country }}">
+          <input type="hidden" name="temp_type" value="c">
+          <button type="submit" style="width:100%; padding:10px 14px;">
+            {{ c.name }}
+            {% if c.state %}, {{ c.state }}{% endif %},
+            {{ c.country }}
+          </button>
+        </form>
+      {% endfor %}
+    </div>
+
+    <div style="margin-top:12px;">
+      <a href="{{ url_for('home') }}">Back</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

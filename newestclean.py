@@ -1,5 +1,5 @@
-from flask import Flask, request, render_template
-import os, time, requests, pytz
+from flask import Flask, request, render_template, render_template_string
+import os, time, requests, pytz, difflib
 from datetime import datetime, timedelta
 from timezonefinder import TimezoneFinder
 from dotenv import load_dotenv
@@ -28,7 +28,6 @@ def day_suffix(n: int) -> str:
     return {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
 
 def future_day_gen():
-    # eliminates global mutation; yields days cyclically
     idx = DAYS_OF_WEEK.index(time.strftime("%A", time.localtime()).upper())
     while True:
         idx = (idx + 1) % 7
@@ -111,7 +110,6 @@ def hourly_forcast_list_f(data, now_local, temp_type, num_hours=24):
         temp_k = temps[idx] + 273.15
         temp_formatted, _unit = print_temperature(temp_k, temp_type)
 
-        # hh:mm AM/PM
         date_part, hour_part = t.split("T")
         hh, mm = map(int, hour_part.split(":")[:2])
         if hh == 0:
@@ -143,7 +141,8 @@ def organize_humidity(data):
     return week_humid
 
 def get_coordinates(city, country):
-    url = f"http://api.openweathermap.org/geo/1.0/direct?q={city},{country}&limit={LIMIT}&appid={API_KEY}"
+    # was http://... → make it https://...
+    url = f"https://api.openweathermap.org/geo/1.0/direct?q={city},{country}&limit={LIMIT}&appid={API_KEY}"
     try:
         r = SESSION.get(url, **REQUEST_KW)
         r.raise_for_status()
@@ -153,6 +152,7 @@ def get_coordinates(city, country):
         return False, "Invalid coordinate found"
     except requests.RequestException:
         return False, "API request failed"
+
 
 def get_current_weather(lat, lon):
     url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}"
@@ -231,6 +231,151 @@ def format_time_for_display(ts: str):
 def extract_time_only(ts: str):  # '2025-08-22T05:27'
     return ts[11:16]
 
+# ==========================
+# City-only geocoding helpers (with fuzzy fallback) — NEW
+# ==========================
+ADMIN_WORDS = (
+    "county", "province", "district", "municipio", "region",
+    "prefecture", "department", "governorate", "oblast", "territory"
+)
+
+def _is_admin_like(name: str) -> bool:
+    n = (name or "").lower()
+    return any(w in n for w in ADMIN_WORDS)
+
+def _normalize_city(s: str) -> str:
+    return "".join((s or "").lower().split())
+
+def _owm_query(q: str, limit=7):
+    url = "https://api.openweathermap.org/geo/1.0/direct"
+    params = {"q": q, "limit": limit, "appid": API_KEY}
+    r = SESSION.get(url, params=params, **REQUEST_KW)
+    r.raise_for_status()
+    data = r.json() or []
+    out = []
+    for d in data:
+        out.append({
+            "name": d.get("name", ""),
+            "state": d.get("state", ""),
+            "country": d.get("country", ""),
+            "lat": d.get("lat"),
+            "lon": d.get("lon"),
+        })
+    return out
+
+def search_locations(city, limit=7):
+    """
+    Try normal query first. If zero results (e.g., 'san digeo'), do a fuzzy fallback:
+    - Query by the longest word / first token / first 3 letters
+    - Rank candidates by similarity to the user's input
+    """
+    city = (city or "").strip()
+    if len(city) < 2:
+        return []
+
+    # 1) Normal query
+    try:
+        primary = _owm_query(city, limit=limit)
+        if primary:
+            return primary
+    except requests.RequestException:
+        return []
+
+    # 2) Fuzzy fallback
+    words = [w for w in city.split() if w]
+    longest = max(words, key=len) if words else city
+    broaden_terms = []
+
+    if len(longest) >= 3:
+        broaden_terms.append(longest)
+    if words and words[0].lower() != longest.lower():
+        broaden_terms.append(words[0])
+    if len(city) >= 3:
+        broaden_terms.append(city[:3])
+
+    seen = set()
+    candidates = []
+    for term in broaden_terms:
+        try:
+            for item in _owm_query(term, limit=10):
+                key = (item.get("name"), item.get("state"), item.get("country"))
+                if key not in seen and item.get("lat") is not None and item.get("lon") is not None:
+                    seen.add(key)
+                    candidates.append(item)
+        except requests.RequestException:
+            continue
+
+    if not candidates:
+        return []
+
+    target = _normalize_city(city)
+    def score(item):
+        name_norm = _normalize_city(item.get("name",""))
+        sim = difflib.SequenceMatcher(None, target, name_norm).ratio()
+        bonus = 0.02 if (item.get("country") == "US" and item.get("state")) else 0.0
+        return sim + bonus
+
+    candidates.sort(key=score, reverse=True)
+    return candidates[:limit]
+
+def pick_best_location(cands, query_city=None):
+    """
+    Choose the best single candidate or return None to force user pick.
+    Rules:
+      - Filter out entries without lat/lon.
+      - Prefer exact name match over admin-like records (e.g., 'San Diego' > 'San Diego County').
+      - If exactly one non-US candidate exists, prefer it (e.g., 'London' -> GB).
+      - For US:
+          * if multiple states exist for the same name -> return None (ambiguous)
+          * else prefer exact name, then entries with a state (city) over admin-like.
+      - Fallback: first non-admin candidate.
+    """
+    if not cands:
+        return None
+
+    cands = [c for c in cands if c.get("lat") is not None and c.get("lon") is not None]
+    if not cands:
+        return None
+
+    if len(cands) == 1:
+        return cands[0]
+
+    query = (query_city or "").strip().lower()
+
+    exact_non_admin = [c for c in cands if (c.get("name","").lower() == query) and not _is_admin_like(c.get("name",""))]
+    if len(exact_non_admin) == 1:
+        return exact_non_admin[0]
+    elif len(exact_non_admin) > 1:
+        with_state = [c for c in exact_non_admin if c.get("state")]
+        if with_state:
+            return with_state[0]
+        return exact_non_admin[0]
+
+    us = [c for c in cands if (c.get("country") or "").upper() == "US"]
+    non_us = [c for c in cands if (c.get("country") or "").upper() != "US"]
+
+    if len(non_us) == 1:
+        return non_us[0]
+
+    us_citylike = [c for c in us if not _is_admin_like(c.get("name",""))]
+    if us_citylike:
+        states = { (c.get("state") or "").lower() for c in us_citylike }
+        if len(states - {""}) > 1:
+            return None  # ambiguous (e.g., Springfield)
+        starts = [c for c in us_citylike if c.get("name","").lower().startswith(query)]
+        if starts:
+            with_state = [c for c in starts if c.get("state")]
+            return with_state[0] if with_state else starts[0]
+        with_state = [c for c in us_citylike if c.get("state")]
+        return with_state[0] if with_state else us_citylike[0]
+
+    non_admin = [c for c in cands if not _is_admin_like(c.get("name",""))]
+    if non_admin:
+        return non_admin[0]
+
+    return cands[0]
+# ==========================
+
 # --- Routes ---
 @app.route("/")
 def home():
@@ -239,18 +384,45 @@ def home():
 @app.route("/get_weather", methods=["GET","POST"])
 def get_weather_page():
     if request.method == "POST":
-        city = (request.form.get("city") or "").strip()
-        country = (request.form.get("country") or "").strip()
+        # Support direct lat/lon postback (after user picks)
+        lat = request.form.get("lat")
+        lon = request.form.get("lon")
         temp_type = (request.form.get("temp_type") or "c").lower()  # normalize
 
-        if not city or not country:
-            return render_template("error.html", message="Please provide both city and country.")
+        if lat and lon:
+            city = request.form.get("picked_name") or "Selected location"
+            country = request.form.get("picked_country") or ""
+            lat = float(lat); lon = float(lon)
+        else:
+            # original inputs (country may be absent if you removed it from the form)
+            city = (request.form.get("city") or "").strip()
+            country = (request.form.get("country") or "").strip()
 
-        coordinates = get_coordinates(city, country)
-        if coordinates[0] is False:
-            return render_template("error.html", message="Invalid location.")
+            if not city and not country:
+                return render_template("error.html", message="Please provide a city (and optional country).")
 
-        lat, lon = coordinates
+            if city and not country:
+                # city-only flow (NEW)
+                candidates = search_locations(city, limit=7)
+                if not candidates:
+                    return render_template("error.html", message=f"No results for “{city}”.")
+                pick = pick_best_location(candidates, query_city=city)
+                if pick is None:
+                    # ambiguous US city → ask user to choose
+                    return render_template("choose_location.html", candidates=candidates, city_query=city)
+                country = pick.get("country", "")
+                lat = float(pick["lat"]); lon = float(pick["lon"])
+                city = pick.get("name") or city
+            else:
+                # existing flow (kept)
+                if not city or not country:
+                    return render_template("error.html", message="Please provide both city and country.")
+                coordinates = get_coordinates(city, country)
+                if coordinates[0] is False:
+                    return render_template("error.html", message="Invalid Location")
+                lat, lon = coordinates
+
+        # === original logic unchanged below ===
         ow = get_current_weather(lat, lon)
         om = fetch_forecast_data(lat, lon)
         if not ow or not om:
@@ -275,8 +447,13 @@ def get_weather_page():
         display_sunrise = format_time_for_display(sunrise)
         display_sunset = format_time_for_display(sunset)
 
+        try:
+            temp_num = float(temp_display.replace("°C","").replace("°F",""))
+        except:
+            temp_num = temp_c
+
         image_type = image_type_f(
-            float(temp_display[:-2]),
+            temp_num,
             description,
             temp_unit,
             now_local=local_time,
@@ -301,6 +478,7 @@ def get_weather_page():
             theme_group=theme_group,
             temp_type=temp_type
         )
+
     return render_template("weather_form.html")
 
 @app.errorhandler(404)

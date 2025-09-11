@@ -3,6 +3,35 @@ body.clearcase {
 
 }
 
+/* Default (desktop/tablet) */
+.plant_shadow {
+  min-height: 100vh;
+  background-image: url('/static/img/plant_shadow.jpg');
+  background-size: cover;          /* stretch nicely */
+  background-repeat: no-repeat;    /* no repeat */
+  background-position: center;     /* keep centered */
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Mobile only (≤ 768px wide, touch devices) */
+@media (max-width: 768px) and (pointer: coarse) {
+  .plant_shadow {
+    background-size: cover;
+    background-repeat: repeat;
+    background-position: center;
+    background-color: #f5f2e8;  /* light sand color to hide seams */
+  }
+}
+
+
+
+
+
+
 body.cloudycase {
   background-image: url('/static/img/cloudycase.jpg');
 }
@@ -119,7 +148,7 @@ rigth side boxes
 .sun-box{
     width: 50%;
     height: 30%;
-    margin-top: -15%;
+    margin-top: -8vh;
     line-height: 90%;
     text-align: center;
 }
@@ -224,6 +253,7 @@ html, body {
 .forecast_container {
   position: fixed;
   bottom: 7px;
+  left: 0%;
   width: calc(100vw - 345px);
   height: 190px;
   color: #000;
@@ -759,71 +789,97 @@ theme groups design
   color: #ffffff !important;
 }
 
-.temp-toggle-form {
-  margin-top: 10px;
-  text-align: right;
-}
-
-.toggle-btn {
-  background: #1e1e1e;
-  border: 2px solid #ffffff88;
-  border-radius: 25px;
-  padding: 6px 14px;
-  font-size: 1em;
-  cursor: pointer;
-  color: #fff;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: background 0.3s;
+/* Make the form visually disappear */
+.temp-toggle-form{
+  border: 0 !important;
+  box-shadow: none !important;
+  width: 30%;
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  bottom: -10px;
+  left: -10px;
+  border-radius: 25%;
+  background: none !important; 
+}
+
+.toggle-btn{
+    background: rgba(255,255,255,0.16) !important; 
+}
+
+@media (max-width: 768px) and (pointer: coarse) {
+  .temp-toggle-form{
+    position: fixed;
+    top: 160px;
+    left: 27%;
+    width:25%;
+    height: 7%;
+    
+  }
+  .sun-box{
+    gap: 3px;
+  }
+
 }
 
 
 
-
-.toggle-btn:hover {
-  background: #292929;
+.search-form {
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  max-width: 500px;
+  margin: 20px auto; /* centers it */
+  text-align: center;
 }
 
-.toggle-btn .active {
-  font-weight: bold;
-  color: #FFD700;
+form.search-form h1 {
+    font-size: 45px !important;
+    font-weight: 350;
+    margin-top: -20px;
+    font-family: Playfair Display;
+    padding: 0;
 }
 
-.toggle-arrow {
-  font-size: 1.1em;
+/* Container */
+.toggletwo {
+  background-color: none !important; /* dark navy */
+  min-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
 }
 
+/* Both buttons */
+#btn-c, #btn-f {
+  background-color: #3399ff;   /* slightly darker blue */
+  color: white;                /* text color */
+  border: none;                /* remove default border */
+  border-radius: 6px;          /* rounded corners */
+  padding: 8px 16px;           /* spacing inside */
+  font-size: 20px;             /* text size */
+  cursor: pointer;             /* pointer on hover */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
+/* Hover effect */
+#btn-c:hover, #btn-f:hover {
+  background-color: #3399ff;   /* slightly darker blue */
+  transform: scale(1.05);      /* little pop */
+}
 
+/* Active button (you already toggle .active in JS) */
+#btn-c.active, #btn-f.active {
+  background-color: #037bf4;   /* slightly darker blue */
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ========================================
-theme groups design 
-======================================== */
-
-
-
+.error-message {
+  font-size: 1.9rem;
+  color: #000000;       /* bootstrap-like red */
+  font-weight: 300;
+  margin: 12px 0;       /* spacing above & below */
+  text-align: center;   /* center in the box */
+  font-family:  Playfair Display;
+  margin-top: -10px;
+}

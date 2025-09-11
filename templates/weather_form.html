@@ -1,28 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Search Weather{% endblock %}
 {% block content %}
-<section class="starter">
-  <h1>Weather Today</h1>
+<div class="plant_shadow">
   <form action="/get_weather" method="POST" class="search-form">
+    <h1>Weather Today</h1>
     <label>
       City
       <input name="city" placeholder="e.g., Calgary" required>
     </label>
-    <label>
-      Country Code
-      <input name="country" placeholder="e.g., CA" required>
-    </label>
-
+    <br>
+  
     <input type="hidden" id="temp_type" name="temp_type" value="c">
 
-    <div class="toggle">
+    <div class="toggletwo">
       <button type="button" id="btn-c" class="active" onclick="setTempType('c')" aria-pressed="true">°C</button>
       <button type="button" id="btn-f" onclick="setTempType('f')" aria-pressed="false">°F</button>
     </div>
 
     <button type="submit">Get Weather</button>
   </form>
-</section>
+</div>   
 {% endblock %}
 
 {% block scripts %}

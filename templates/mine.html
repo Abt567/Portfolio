@@ -9,17 +9,6 @@
     <h1 class="title_words">{{ city }}, {{ country }}</h1>
     <h2 class="temp_text_title"><strong>{{ temperature }}</strong></h2>
 
-    <form method="POST" action="/get_weather" class="temp-toggle-form">
-      <input type="hidden" name="city" value="{{ city }}">
-      <input type="hidden" name="country" value="{{ country }}">
-      <input type="hidden" name="temp_type" value="{{ 'f' if temp_type == 'c' else 'c' }}">
-      <button type="submit" class="toggle-btn" aria-label="Toggle temperature units">
-        <span class="{{ 'active' if temp_type == 'c' else '' }}">°C</span>
-        <span class="toggle-arrow">⇆</span>
-        <span class="{{ 'active' if temp_type == 'f' else '' }}">°F</span>
-      </button>
-    </form>
-
     <div class="sun-box">
       <p><i class="fa-solid fa-sun" aria-hidden="true"></i> Sunrise: {{ sunrise }}</p>
       <p><i class="fa-solid fa-moon" aria-hidden="true"></i> Sunset: {{ sunset }}</p>
@@ -50,7 +39,23 @@
         </div>
       </div>
     {% endfor %}
+
+
+    <form method="POST" action="/get_weather" class="temp-toggle-form">
+      <input type="hidden" name="city" value="{{ city }}">
+      <input type="hidden" name="country" value="{{ country }}">
+      <input type="hidden" name="temp_type" value="{{ 'f' if temp_type == 'c' else 'c' }}">
+      <button type="submit" class="toggle-btn" aria-label="Toggle temperature units">
+        <span class="{{ 'active' if temp_type == 'c' else '' }}">°C</span>
+        <span class="toggle-arrow">⇆</span>
+        <span class="{{ 'active' if temp_type == 'f' else '' }}">°F</span>
+      </button>
+    </form>
+  
+
+  
   </section>
+
 </div>
 
 <section class="forecast_container" aria-label="Hourly forecast">

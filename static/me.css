@@ -79,6 +79,7 @@ body.defaultcase {
   background-image: url('/static/img/defaultcase.jpg');
 }
 
+/* --- STOP body jumps for all themes --- */
 body.clearcase,
 body.cloudycase,
 body.coldcase,
@@ -90,13 +91,14 @@ body.snowycase,
 body.sunnycase,
 body.mooncase,
 body.defaultcase {
-  min-height: 100vh;                  /* ✅ Fills full screen height */
-  background-size: cover;             /* ✅ Stretches image */
-  background-repeat: no-repeat;       /* ✅ No tiling */
-  background-attachment: scroll;      /* ✅ Scrolls with page */
-  background-position: center center; /* ✅ Keeps centered */
-
+  min-height: 100vh;             /* layout height known immediately */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-color: #0a0a0a;     /* neutral fallback; pick 1 matching your imagery */
 }
+
 /* Apply fonts globally */
 body {
   font-family: sans-serif;

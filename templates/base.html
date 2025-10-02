@@ -4,17 +4,79 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{% block title %}Weather Today{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='me.css') }}">
+
+  <!-- ✨ tiny critical CSS: enough to style the LCP text immediately -->
+  <style>
+    /* fast system font fallback; webfonts will swap in */
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+                   Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+    /* LCP: large temp/title text */
+    .temp_text_title {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 700;
+      line-height: 1.15;
+      text-align: center;
+      margin: 0.5em 0;
+    }
+    /* landing page H1 (styles.css) */
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 2.2rem;
+      letter-spacing: .5px;
+      text-align: center;
+    }
+  </style>
+
+  <!-- ✅ make your CSS non-blocking (preload + swap) -->
+  <link rel="preload" as="style"
+        href="{{ url_for('static', filename='styles.css') }}"
+        onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"></noscript>
+
+  <link rel="preload" as="style"
+        href="{{ url_for('static', filename='me.css') }}"
+        onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ url_for('static', filename='me.css') }}"></noscript>
+
+  <!-- ✅ fonts: preconnect + single stylesheet, all families you reference -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        onload="this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap">
+  </noscript>
+
+  <!-- ✅ font awesome non-blocking -->
+  <link rel="preload" as="style"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        onload="this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  </noscript>
+
+  <!-- (optional) if your landing page background is always plant_shadow, you can preload it:
+  <link rel="preload" as="image" href="{{ url_for('static', filename='img/plant_shadow.jpg') }}">
+  -->
+
   {% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
   <main role="main">
     {% block content %}{% endblock %}
   </main>
+
+  <!-- tip: in child templates, load scripts with `defer` -->
   {% block scripts %}{% endblock %}
 </body>
 </html>

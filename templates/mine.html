@@ -72,7 +72,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
+<script defer>
   document.addEventListener('DOMContentLoaded', () => {
     const boxes = document.querySelectorAll('.forecast-box');
     boxes.forEach(b => {

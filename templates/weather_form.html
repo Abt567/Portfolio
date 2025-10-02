@@ -1,38 +1,26 @@
 {% extends "base.html" %}
 {% block title %}Search Weather{% endblock %}
+
 {% block content %}
 <div class="plant_shadow">
   <form action="/get_weather" method="POST" class="search-form">
     <h1>Weather Today</h1>
-    <label>
-      City
-      <input name="city" placeholder="e.g., Calgary" required>
-    </label>
-    <br>
-  
+
+    <label for="city-input">City</label>
+    <input id="city-input" name="city" placeholder="e.g., Calgary" required>
+
     <input type="hidden" id="temp_type" name="temp_type" value="c">
 
-    <div class="toggletwo">
-      <button type="button" id="btn-c" class="active" onclick="setTempType('c')" aria-pressed="true">°C</button>
-      <button type="button" id="btn-f" onclick="setTempType('f')" aria-pressed="false">°F</button>
+    <div class="toggletwo" role="group" aria-label="Temperature unit">
+      <button type="button" id="btn-c" class="active" aria-pressed="true">°C</button>
+      <button type="button" id="btn-f" aria-pressed="false">°F</button>
     </div>
 
     <button type="submit">Get Weather</button>
   </form>
-</div>   
+</div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-  let currentTemp = 'c';
-  function setTempType(t){
-    currentTemp = t;
-    document.getElementById('temp_type').value = t;
-    document.getElementById('btn-c').classList.toggle('active', t==='c');
-    document.getElementById('btn-f').classList.toggle('active', t==='f');
-    document.getElementById('btn-c').setAttribute('aria-pressed', t==='c');
-    document.getElementById('btn-f').setAttribute('aria-pressed', t==='f');
-  }
-  window.onload = () => setTempType('c');
-</script>
+  <script src="{{ url_for('static', filename='js/form-page.js') }}" defer></script>
 {% endblock %}

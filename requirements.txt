@@ -1,6 +1,18 @@
-Flask
-requests
-python-dotenv
-pytz
-timezonefinder
-gunicorn
+# Web framework + production server
+Flask==3.0.3
+gunicorn==22.0.0
+
+# HTTP requests + session handling
+requests==2.32.3
+
+# Environment variable loader
+python-dotenv==1.0.1
+
+# Timezone + datetime helpers
+pytz==2024.1
+timezonefinder==6.5.4
+
+# Any JSON/dict utilities (standard lib handles most, no extra needed)
+
+# If you use Jinja2 filters in templates, Flask already brings Jinja2 in
+# If you use Werkzeug for utils, Flask already brings Werkzeug in

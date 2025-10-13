@@ -18,7 +18,34 @@
 
     <button type="submit">Get Weather</button>
   </form>
+
+  <div style="text-align:right; margin:10px;">
+    {% if current_user.is_authenticated %}
+      <span>Welcome, {{ current_user.email }}!</span>
+      <a href="/auth/logout">Logout</a>
+      <a href="/analytics">Analytics</a>
+    {% else %}
+      <a href="/auth/signup">Sign Up</a>
+      <a href="/auth/login">Log In</a>
+    {% endif %}
+  </div>
+<hr>
+
+  <div style="display:flex; gap:12px; justify-content:flex-end; align-items:center; margin:10px 0;">
+    <a href="/">Home</a>
+    {% if current_user.is_authenticated %}
+      <span>Welcome, {{ current_user.email }}!</span>
+      <a href="/analytics">Analytics</a>
+      <a href="/auth/logout">Logout</a>
+    {% else %}
+      <a href="/auth/signup">Sign Up</a>
+      <a href="/auth/login">Log In</a>
+    {% endif %}
+  </div>
+  <hr>
+
 </div>
+
 {% endblock %}
 
 {% block scripts %}

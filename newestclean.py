@@ -1,9 +1,19 @@
+# newestclean.py  (minimal changes applied)
+
 from flask import Flask, request, render_template, render_template_string
+from jinja2 import TemplateNotFound
 import os, time, requests, pytz, difflib
 from datetime import datetime, timedelta
 from timezonefinder import TimezoneFinder
 from dotenv import load_dotenv
 import config
+
+from flask_login import LoginManager, current_user, login_required
+from sqlalchemy import func, select, inspect
+
+# keep your original imports (now deduped)
+from models_core import init_db, get_session, User, SearchEvent, ObservationLog
+from auth import bp as auth_bp
 
 # --- Setup ---
 load_dotenv()
@@ -11,8 +21,22 @@ API_KEY = os.getenv("API_KEY")
 if not API_KEY:
     raise RuntimeError("Missing API_KEY in .env")
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = os.getenv("FLASK_SECRET", "dev")
+
+# --- DB + Login setup ---
+init_db()
+
+login_manager = LoginManager()
+login_manager.login_view = "auth.login"  # redirect target for @login_required
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id: str):
+    db = get_session()
+    return db.get(User, int(user_id))
+
+app.register_blueprint(auth_bp)
 
 LIMIT = config.LIMIT
 DAYS_OF_WEEK = config.DAYS_OF_WEEK
@@ -21,7 +45,7 @@ DAYS_OF_WEEK = config.DAYS_OF_WEEK
 SESSION = requests.Session()
 REQUEST_KW = dict(timeout=10)
 
-# --- Helpers ---
+# --- Helpers (unchanged) ---
 def day_suffix(n: int) -> str:
     if 11 <= n % 100 <= 13:
         return "th"
@@ -43,7 +67,7 @@ def print_temperature(temp_k: float, temp_type: str):
     if t == "c":
         return f"{temp_k - 273.15:.2f}°C", "celsius"
     if t == "f":
-        return f"{(temp_k - 273.15) * 9 / 5 + 32:.2f}°F", "fahrenheit"
+        return f("{(temp_k - 273.15) * 9 / 5 + 32:.2f}°F"), "fahrenheit"
     return "Invalid temperature type", "unknown"
 
 def fetch_forecast_data(lat, lon):
@@ -141,7 +165,6 @@ def organize_humidity(data):
     return week_humid
 
 def get_coordinates(city, country):
-    # was http://... → make it https://...
     url = f"https://api.openweathermap.org/geo/1.0/direct?q={city},{country}&limit={LIMIT}&appid={API_KEY}"
     try:
         r = SESSION.get(url, **REQUEST_KW)
@@ -152,7 +175,6 @@ def get_coordinates(city, country):
         return False, "Invalid coordinate found"
     except requests.RequestException:
         return False, "API request failed"
-
 
 def get_current_weather(lat, lon):
     url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}"
@@ -232,7 +254,7 @@ def extract_time_only(ts: str):  # '2025-08-22T05:27'
     return ts[11:16]
 
 # ==========================
-# City-only geocoding helpers (with fuzzy fallback) — NEW
+# City-only geocoding helpers (with fuzzy fallback)
 # ==========================
 ADMIN_WORDS = (
     "county", "province", "district", "municipio", "region",
@@ -264,11 +286,6 @@ def _owm_query(q: str, limit=7):
     return out
 
 def search_locations(city, limit=7):
-    """
-    Try normal query first. If zero results (e.g., 'san digeo'), do a fuzzy fallback:
-    - Query by the longest word / first token / first 3 letters
-    - Rank candidates by similarity to the user's input
-    """
     city = (city or "").strip()
     if len(city) < 2:
         return []
@@ -319,17 +336,6 @@ def search_locations(city, limit=7):
     return candidates[:limit]
 
 def pick_best_location(cands, query_city=None):
-    """
-    Choose the best single candidate or return None to force user pick.
-    Rules:
-      - Filter out entries without lat/lon.
-      - Prefer exact name match over admin-like records (e.g., 'San Diego' > 'San Diego County').
-      - If exactly one non-US candidate exists, prefer it (e.g., 'London' -> GB).
-      - For US:
-          * if multiple states exist for the same name -> return None (ambiguous)
-          * else prefer exact name, then entries with a state (city) over admin-like.
-      - Fallback: first non-admin candidate.
-    """
     if not cands:
         return None
 
@@ -374,7 +380,6 @@ def pick_best_location(cands, query_city=None):
         return non_admin[0]
 
     return cands[0]
-# ==========================
 
 # --- Routes ---
 @app.route("/")
@@ -402,7 +407,7 @@ def get_weather_page():
                 return render_template("error.html", message="Please provide a city (and optional country).")
 
             if city and not country:
-                # city-only flow (NEW)
+                # city-only flow
                 candidates = search_locations(city, limit=7)
                 if not candidates:
                     return render_template("error.html", message=f"No results for “{city}”.")
@@ -462,6 +467,21 @@ def get_weather_page():
         )
         theme_group = get_theme_group(image_type)
 
+        # --- minimal addition: LOG THE SEARCH ---
+        try:
+            db = get_session()
+            db.add(SearchEvent(
+                user_id=current_user.id if current_user.is_authenticated else None,
+                city=city,
+                country=country or None,
+                lat=lat,
+                lon=lon,
+                temp_unit=(temp_type or "c")[:1].lower()
+            ))
+            db.commit()
+        except Exception:
+            pass  # keep behavior same: don't break page if logging fails
+
         return render_template(
             "mine.html",
             image_type=image_type,
@@ -480,6 +500,53 @@ def get_weather_page():
         )
 
     return render_template("weather_form.html")
+# --- helper added just above analytics route ---
+def table_has_column(session, table_name: str, column_name: str) -> bool:
+    """
+    Returns True if the given column exists in the given table,
+    using SQLAlchemy's inspector (works cleanly with SQLite).
+    """
+    try:
+        insp = inspect(session.bind)
+        cols = [c["name"].lower() for c in insp.get_columns(table_name)]
+        return column_name.lower() in cols
+    except Exception:
+        return False
+
+
+@app.route("/analytics")
+@login_required
+def analytics():
+    db = get_session()
+
+    # Top cities (same query style you use elsewhere)
+    top_cities = db.execute(
+        select(SearchEvent.city, func.count(SearchEvent.id))
+        .group_by(SearchEvent.city)
+        .order_by(func.count(SearchEvent.id).desc())
+        .limit(10)
+    ).all()
+
+    # Handle missing `country` column gracefully
+    has_country = table_has_column(db, "search_event", "country")
+
+    if has_country:
+        recent = db.execute(
+            select(SearchEvent.city, SearchEvent.country, SearchEvent.created_at)
+            .where(SearchEvent.user_id == current_user.id)
+            .order_by(SearchEvent.created_at.desc())
+            .limit(15)
+        ).all()
+    else:
+        rows = db.execute(
+            select(SearchEvent.city, SearchEvent.created_at)
+            .where(SearchEvent.user_id == current_user.id)
+            .order_by(SearchEvent.created_at.desc())
+            .limit(15)
+        ).all()
+        recent = [(city, "", ts) for (city, ts) in rows]
+
+    return render_template("analytics.html", top_cities=top_cities, recent=recent)
 
 @app.errorhandler(404)
 def not_found_error(e):

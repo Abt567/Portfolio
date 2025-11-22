@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <body>
+    <div style="text-align:right; margin:10px;">
+      <a href="/">Home</a>
+      <a href="/auth/logout">Logout</a>
+    </div>
+    <h2>Analytics in the right file</h2>
+
+    <h3>Top Cities (global)</h3>
+    <table border="1" cellpadding="6" cellspacing="0">
+      <tr><th>#</th><th>City</th><th>Searches</th></tr>
+      {% for city, cnt in top_cities %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ city }}</td>
+          <td>{{ cnt }}</td>
+        </tr>
+      {% endfor %}
+      {% if not top_cities %}
+        <tr><td colspan="3">No searches yet.</td></tr>
+      {% endif %}
+    </table>
+
+    <h3 style="margin-top:24px;">Your Recent Searches</h3>
+    <table border="1" cellpadding="6" cellspacing="0">
+      <tr><th>#</th><th>City</th><th>Country</th><th>When</th></tr>
+      {% for city, country, ts in recent %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ city }}</td>
+          <td>{{ country }}</td>
+          <td>{{ ts }}</td>
+        </tr>
+      {% endfor %}
+      {% if not recent %}
+        <tr><td colspan="4">No recent searches yet.</td></tr>
+      {% endif %}
+    </table>
+  </body>
+</html>

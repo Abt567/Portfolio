@@ -1,17 +1,26 @@
 /* === Base Page Styling === */
+html,
 body {
+    height: 100%;
     margin: 0;
-    height: 100vh;
+}
+
+body {
     font-family: 'Inter', sans-serif;
     background-image: url("/static/img/plant_shadow.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+}
+
+
+.page-wrapper {
+    min-height: 100vh;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 
 
 /* === Title === */

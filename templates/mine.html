@@ -39,51 +39,34 @@
         </div>
       </div>
     {% endfor %}
+  </section>
 
-
-    <form method="POST" action="/get_weather" class="temp-toggle-form">
+  <div class="bottom_section">
+      <form method="POST" action="/get_weather" class="testing">
       <input type="hidden" name="city" value="{{ city }}">
       <input type="hidden" name="country" value="{{ country }}">
       <input type="hidden" name="temp_type" value="{{ 'f' if temp_type == 'c' else 'c' }}">
-      <button type="submit" class="toggle-btn" aria-label="Toggle temperature units">
-        <span class="{{ 'active' if temp_type == 'c' else '' }}">°C</span>
-        <span class="toggle-arrow">⇆</span>
-        <span class="{{ 'active' if temp_type == 'f' else '' }}">°F</span>
-      </button>
-    </form>
+        <button type="submit" class="toggle-btn" aria-label="Toggle temperature units">
+          <span class="{{ 'active' if temp_type == 'c' else '' }}">°C</span>
+          <span class="toggle-arrow">⇆</span>
+          <span class="{{ 'active' if temp_type == 'f' else '' }}">°F</span>
+        </button>
+      </form>
 
-    <div style="text-align:right; margin:10px;">
-      {% if current_user.is_authenticated %}
-        <span>Welcome, {{ current_user.email }}!</span>
-        <a href="/auth/logout">Logout</a>
-        <a href="/analytics">Analytics</a>
-      {% else %}
-        <a href="/auth/signup">Sign Up</a>
-        <a href="/auth/login">Log In</a>
-      {% endif %}
-    </div>
-
-    <div style="display:flex; gap:12px; justify-content:flex-end; align-items:center; margin:10px 0;">
-      <a href="/">Home</a>
-      {% if current_user.is_authenticated %}
-        <span>Welcome, {{ current_user.email }}!</span>
-        <a href="/analytics">Analytics</a>
-        <a href="/auth/logout">Logout</a>
-      {% else %}
-        <a href="/auth/signup">Sign Up</a>
-        <a href="/auth/login">Log In</a>
-      {% endif %}
-    </div>
-    <hr>
-
+      <div class="auth-links">
+        {% if current_user.is_authenticated %}
+            <span>Welcome, {{ current_user.email }}!</span>
+            <a href="/auth/logout">Logout</a>
+            <a href="/analytics">Analytics</a>
+        {% else %}
+            <a href="/auth/signup">Sign Up</a>
+            <a href="/auth/login">Log In</a>
+        {% endif %}
+      </div>
     
+    </div>
 
-  
-
-  
-  </section>
-
-</div>
+  </div>
 
 <section class="forecast_container" aria-label="Hourly forecast">
   {% set today_date = hourly_forecast[0].date %}

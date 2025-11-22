@@ -11,9 +11,11 @@ import config
 from flask_login import LoginManager, current_user, login_required
 from sqlalchemy import func, select, inspect
 
-# keep your original imports (now deduped)
 from models_core import init_db, get_session, User, SearchEvent, ObservationLog
 from auth import bp as auth_bp
+
+
+
 
 # --- Setup ---
 load_dotenv()
@@ -471,7 +473,7 @@ def get_weather_page():
         try:
             db = get_session()
             db.add(SearchEvent(
-                user_id=current_user.id if current_user.is_authenticated else None,
+                user_id=current_user.id if current_user.is_authenticated else None, # if user signed in save that info 
                 city=city,
                 country=country or None,
                 lat=lat,
@@ -557,4 +559,4 @@ def internal_error(e):
     return render_template("error.html", message="500 - Internal Server Error"), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(host="0.0.0.0", port=5000, debug=True)

@@ -1,51 +1,37 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 {% block title %}Search Weather{% endblock %}
 
 {% block content %}
-<div class="plant_shadow">
+<div class="page-wrapper">
   <form action="/get_weather" method="POST" class="search-form">
-    <h1>Weather Today</h1>
+      <h1>Weather Today</h1>
 
-    <label for="city-input">City</label>
-    <input id="city-input" name="city" placeholder="e.g., Calgary" required>
+      <label for="city-input">City</label>
+      <input id="city-input" name="city" placeholder="e.g., Calgary" required>
 
-    <input type="hidden" id="temp_type" name="temp_type" value="c">
+      <input type="hidden" id="temp_type" name="temp_type" value="c">
 
-    <div class="toggletwo" role="group" aria-label="Temperature unit">
-      <button type="button" id="btn-c" class="active" aria-pressed="true">°C</button>
-      <button type="button" id="btn-f" aria-pressed="false">°F</button>
-    </div>
+      <div class="toggletwo" role="group" aria-label="Temperature unit">
+        <button type="button" id="btn-c" class="active" aria-pressed="true">°C</button>
+        <button type="button" id="btn-f" aria-pressed="false">°F</button>
+      </div>
 
-    <button type="submit">Get Weather</button>
+      <button type="submit">Get Weather</button>
+
+
+      <div style="display:flex; gap:12px; justify-content:center; align-items:center; margin:10px 0;">
+        {% if current_user.is_authenticated %}
+          <span>Welcome, {{ current_user.email }}!</span>
+          <a href="/auth/logout">Logout</a>
+          <a href="/analytics">Analytics</a>
+        {% else %}
+          <a href="/auth/signup">Sign Up</a>
+          <a href="/auth/login">Log In</a>
+        {% endif %}
+      </div>
   </form>
-
-  <div style="text-align:right; margin:10px;">
-    {% if current_user.is_authenticated %}
-      <span>Welcome, {{ current_user.email }}!</span>
-      <a href="/auth/logout">Logout</a>
-      <a href="/analytics">Analytics</a>
-    {% else %}
-      <a href="/auth/signup">Sign Up</a>
-      <a href="/auth/login">Log In</a>
-    {% endif %}
-  </div>
-<hr>
-
-  <div style="display:flex; gap:12px; justify-content:flex-end; align-items:center; margin:10px 0;">
-    <a href="/">Home</a>
-    {% if current_user.is_authenticated %}
-      <span>Welcome, {{ current_user.email }}!</span>
-      <a href="/analytics">Analytics</a>
-      <a href="/auth/logout">Logout</a>
-    {% else %}
-      <a href="/auth/signup">Sign Up</a>
-      <a href="/auth/login">Log In</a>
-    {% endif %}
-  </div>
-  <hr>
-
+  
 </div>
-
 {% endblock %}
 
 {% block scripts %}

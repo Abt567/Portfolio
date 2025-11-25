@@ -1,41 +1,82 @@
-<!doctype html>
-<html>
-  <body>
-    <div style="text-align:right; margin:10px;">
-      <a href="/">Home</a>
-      <a href="/auth/logout">Logout</a>
-    </div>
-    <h2>Analytics in the right file</h2>
+{% extends "base.html" %}
+{% block body_class %}analytics-page{% endblock %}
 
-    <h3>Top Cities (global)</h3>
-    <table border="1" cellpadding="6" cellspacing="0">
-      <tr><th>#</th><th>City</th><th>Searches</th></tr>
-      {% for city, cnt in top_cities %}
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td>{{ city }}</td>
-          <td>{{ cnt }}</td>
-        </tr>
-      {% endfor %}
-      {% if not top_cities %}
-        <tr><td colspan="3">No searches yet.</td></tr>
-      {% endif %}
-    </table>
 
-    <h3 style="margin-top:24px;">Your Recent Searches</h3>
-    <table border="1" cellpadding="6" cellspacing="0">
-      <tr><th>#</th><th>City</th><th>Country</th><th>When</th></tr>
-      {% for city, country, ts in recent %}
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td>{{ city }}</td>
-          <td>{{ country }}</td>
-          <td>{{ ts }}</td>
-        </tr>
-      {% endfor %}
-      {% if not recent %}
-        <tr><td colspan="4">No recent searches yet.</td></tr>
+{% block content %}
+<div class="analytics-page">
+  <div class="back-home-btn_box">
+    <a href="{{ url_for('home') }}" class="back-home-btn">Home</a>
+  </div>
+
+  
+  <header class="analytics-header">
+    <h1>Analytics</h1>
+    <p class="analytics-subtitle">
+      Weather searches from your account
+    </p>
+  </header>
+
+  <section class="analytics-grid">
+    <article class="analytics-card">
+      <h2 class="analytics-card-title">Top Cities (global)</h2>
+
+      {% if top_cities %}
+      <table class="analytics-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>City</th>
+            <th class="analytics-table-right">Searches</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in top_cities %}
+            {% set city, count = row %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ city }}</td>
+              <td class="analytics-table-right">{{ count }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <p class="analytics-empty">No searches yet. Go try a city.</p>
       {% endif %}
-    </table>
-  </body>
-</html>
+    </article>
+
+    <!-- Recent searches card -->
+    <article class="analytics-card">
+      <h2 class="analytics-card-title">Your recent searches</h2>
+
+      {% if recent %}
+      <table class="analytics-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>City</th>
+            <th>Country</th>
+            <th class="analytics-table-right">When</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in recent %}
+            {% set city, country, ts = row %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ city }}</td>
+              <td>{{ country or "—" }}</td>
+              <td class="analytics-table-right">
+                {{ ts.strftime("%Y-%m-%d %H:%M:%S") }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <p class="analytics-empty">You have no recent searches yet.</p>
+      {% endif %}
+    </article>
+  </section>
+</div>
+{% endblock %}

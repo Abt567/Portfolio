@@ -53,16 +53,13 @@
         </button>
       </form>
 
-      <div class="auth-links">
-        {% if current_user.is_authenticated %}
-            <span>Welcome, {{ current_user.email }}!</span>
-            <a href="/auth/logout">Logout</a>
-            <a href="/analytics">Analytics</a>
-        {% else %}
-            <a href="/auth/signup">Sign Up</a>
-            <a href="/auth/login">Log In</a>
-        {% endif %}
-      </div>
+      {% if current_user.is_authenticated %}
+          <a href="/auth/logout">Logout</a>
+          <a href="/analytics">Analytics</a>
+      {% else %}
+          <a href="/auth/signup">Sign Up</a>
+          <a href="/auth/login">Log In</a>
+      {% endif %}
     
     </div>
 
@@ -82,19 +79,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script defer>
-  document.addEventListener('DOMContentLoaded', () => {
-    const boxes = document.querySelectorAll('.forecast-box');
-    boxes.forEach(b => {
-      b.addEventListener('click', () => {
-        boxes.forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-      });
-      b.addEventListener('blur', () => b.classList.remove('active'));
-      b.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { b.click(); }
-      });
-    });
-  });
-</script>
+<script src="{{ url_for('static', filename='js/results-page.js') }}" defer></script>
 {% endblock %}

@@ -8,13 +8,30 @@ body.clearcase {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  padding: 15px;
+}
+
+.log_in_and_sign_up_container{
+  min-height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
 }
 
+.plant_shadow .back-home-btn_box {
+  position: fixed;
+  top: 2%;
+}
+
+a.back-home-btn {
+    color: #ffffff;
+  }
+
+
 @media (max-width: 768px) and (pointer: coarse) {
+  a.back-home-btn {
+    color: #000;
+  }
   .plant_shadow {
     background-size: cover;
     background-repeat: repeat;
@@ -28,8 +45,23 @@ body.cloudycase {
 }
 
 body.coldcase {
-  background-image: url('/static/img/coldcase.jpg');
+  position: relative;
+  overflow: hidden;
 }
+
+body.coldcase::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('/static/img/coldcase.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  transform: scaleX(-1);
+  z-index: -1;           
+}
+
 
 body.sunrisecase,
 body.sunsetcase {
@@ -109,6 +141,7 @@ rigth side boxes
   flex-direction: column;
   align-items: center;
   text-align: center;
+  gap:0px !important;
 }
 
 .testing {
@@ -124,7 +157,7 @@ rigth side boxes
     cursor: pointer;
     color: white;
 
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 600;
 
     display: flex;
@@ -134,6 +167,7 @@ rigth side boxes
     padding: 0 !important;
     margin: 0 !important;
 }
+
 
 .testing .toggle-btn span.active {
     color: #ffe7b0;
@@ -152,6 +186,7 @@ rigth side boxes
     color: white;
     text-decoration: none;
     margin-left: 8px;
+    font-size: 1.2rem;
 }
 
 .bottom_section a:hover {
@@ -162,7 +197,8 @@ rigth side boxes
 .bottom_section {
     position: fixed;
     bottom: 20px;
-    left: 53%;
+    top: 90%;
+    left: 46%;
     transform: translateX(-50%);
     height: auto;
     width: 90%;
@@ -179,6 +215,7 @@ rigth side boxes
     display: flex;
     align-items: center;
     gap: 10px;               /* space between Sign Up and Log In */
+    height: fit-content;
 }
 
 .auth-links a {
@@ -323,6 +360,12 @@ rigth side boxes
   justify-content: center;
 }
 
+body.weather-form-page {
+  height: 100vh;
+  overflow: hidden;
+}
+
+
 /* ========================================
 hornintal forcast card boxes 
 ======================================== */
@@ -345,6 +388,7 @@ html, body {
 .weather-icon i {
   line-height: 0;
 }
+
 
 .forecast_container {
   position: fixed;
@@ -439,7 +483,7 @@ html, body {
   .bottom_section {
     position: relative;
     bottom: -10%;
-    left: 0;
+    left: -5%;
     transform: none;
     width: 100%;
     max-width: 100%;
@@ -739,6 +783,7 @@ h4 {
   color: #fff;
 }
 
+
 .theme-snowtype .title_words,
 .theme-snowtype .temp_text_title {
   color: #fff;
@@ -947,4 +992,148 @@ form.search-form h1 {
   text-align: center;
   font-family: Playfair Display;
   margin-top: -10px;
+}
+
+/* ===== ANALYTICS PAGE WRAPPER ===== */
+
+.analytics-page {
+  min-height: 100vh;
+  padding: 20px 16px;
+  /* if you want a background ONLY here (not whole site) */
+  background-image: url('/static/img/planet_shadow.jpg'); /* change if needed */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  box-sizing: border-box;
+}
+
+/* HEADER */
+
+.analytics-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.analytics-header h1 {
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.analytics-subtitle {
+  margin-top: 4px;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+/* GRID LAYOUT */
+
+.analytics-grid {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* On bigger screens: 2 columns */
+@media (min-width: 768px) {
+  .analytics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* CARDS */
+
+.analytics-card {
+  background: rgba(0, 0, 0, 0.45);          /* dark glassy card */
+  backdrop-filter: blur(6px);
+  color: white;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* TITLES */
+
+.analytics-card-title {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* EMPTY STATE */
+
+.analytics-empty {
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* TABLES */
+
+.analytics-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.analytics-table th,
+.analytics-table td {
+  padding: 8px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.analytics-table th {
+  text-align: left;
+  font-weight: 600;
+}
+
+.analytics-table-right {
+  text-align: right;
+}
+
+
+
+body.analytics-page {
+  min-height: 100%;
+  background-image: url('/static/img/plant_shadow.jpg');  
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-attachment: fixed;  
+  background-color: #d9d0c3;
+  padding: 0px;    
+}
+
+
+.analytics-page {
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+
+
+.back-home-btn_box {
+  width: 100px;
+  height: 30px;
+  border-radius: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  margin-left: 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+.back-home-btn {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: 0.2s ease-in-o
 }

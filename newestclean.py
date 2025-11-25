@@ -30,7 +30,7 @@ app.secret_key = os.getenv("FLASK_SECRET", "dev")
 init_db()
 
 login_manager = LoginManager()
-login_manager.login_view = "auth.login"  # redirect target for @login_required
+login_manager.login_view = "auth.login"  
 login_manager.init_app(app)
 
 @login_manager.user_loader
@@ -38,16 +38,19 @@ def load_user(user_id: str):
     db = get_session()
     return db.get(User, int(user_id))
 
+@app.context_processor
+def inject_current_user():
+    return dict(current_user=current_user)
+
 app.register_blueprint(auth_bp)
+
 
 LIMIT = config.LIMIT
 DAYS_OF_WEEK = config.DAYS_OF_WEEK
 
-# use local session + timeouts for safety
 SESSION = requests.Session()
 REQUEST_KW = dict(timeout=10)
 
-# --- Helpers (unchanged) ---
 def day_suffix(n: int) -> str:
     if 11 <= n % 100 <= 13:
         return "th"
@@ -69,8 +72,9 @@ def print_temperature(temp_k: float, temp_type: str):
     if t == "c":
         return f"{temp_k - 273.15:.2f}°C", "celsius"
     if t == "f":
-        return f("{(temp_k - 273.15) * 9 / 5 + 32:.2f}°F"), "fahrenheit"
+        return f"{(temp_k - 273.15) * 9 / 5 + 32:.2f}°F", "fahrenheit"
     return "Invalid temperature type", "unknown"
+
 
 def fetch_forecast_data(lat, lon):
     url = (
@@ -156,6 +160,30 @@ def hourly_forcast_list_f(data, now_local, temp_type, num_hours=24):
         })
     return out
 
+def current_hour_description(om_data, now_local):
+    """
+    Pick the weather description for the current local hour
+    using the hourly weathercode from Open-Meteo.
+    """
+    times = om_data["hourly"]["time"]
+    wcodes = om_data["hourly"]["weathercode"]
+
+    now_str = now_local.strftime("%Y-%m-%dT%H:00")
+
+    try:
+        idx = times.index(now_str)
+    except ValueError:
+        from datetime import datetime as _dt
+
+        def parse(ts):
+            return _dt.strptime(ts, "%Y-%m-%dT%H:%M")
+
+        target = parse(now_str)
+        idx = min(range(len(times)), key=lambda i: abs(parse(times[i]) - target))
+
+    code = wcodes[idx]
+    return config.WEATHERCODE_MAP.get(code, "Unknown")
+
 def organize_humidity(data):
     humidity = data["hourly"]["relative_humidity_2m"]
     n_days = len(humidity) // 24
@@ -189,6 +217,7 @@ def get_current_weather(lat, lon):
 
 def image_type_f(temp, description, temp_type, now_local=None, sunrise_time=None, sunset_time=None):
     description = (description or "").lower()
+
     if now_local and sunrise_time and sunset_time:
         try:
             if sunrise_time == "00:00" and sunset_time == "00:00":
@@ -211,19 +240,41 @@ def image_type_f(temp, description, temp_type, now_local=None, sunrise_time=None
         except Exception:
             pass
 
-    if "rain" in description: return "raincase"
-    if "snow" in description: return "snowycase"
-    if "cloud" in description: return "cloudycase"
-    if "clear" in description: return "clearcase"
-    if "sun" in description: return "sunnycase"
-    if any(x in description for x in ["fog", "mist"]): return "foggycase"
-
     unit = (temp_type or "").lower()
+
+    if "rain" in description:
+        return "raincase"
+    if "snow" in description:
+        return "snowycase"
+    if any(x in description for x in ["fog", "mist"]):
+        return "foggycase"
+
+    if unit == "celsius" and temp < 10:
+        return "coldcase"
+    if unit == "fahrenheit" and temp < 50:
+        return "coldcase"
+
+    if "cloud" in description:
+        return "cloudycase"
+    if "clear" in description:
+        return "clearcase"
+    if "sun" in description:
+        return "sunnycase"
+
     if unit == "celsius":
-        return "snowycase" if temp < 0 else "sunnycase" if temp > 25 else "clearcase"
+        if temp > 25:
+            return "sunnycase"
+        return "clearcase"
+
     if unit == "fahrenheit":
-        return "snowycase" if temp < 32 else "sunnycase" if temp > 77 else "clearcase"
+        if temp > 77:
+            return "sunnycase"
+        return "clearcase"
+
     return "clearcase"
+
+
+
 
 def get_theme_group(image_type):
     snowtype = {"snowycase","coldcase"}
@@ -255,9 +306,8 @@ def format_time_for_display(ts: str):
 def extract_time_only(ts: str):  # '2025-08-22T05:27'
     return ts[11:16]
 
-# ==========================
 # City-only geocoding helpers (with fuzzy fallback)
-# ==========================
+
 ADMIN_WORDS = (
     "county", "province", "district", "municipio", "region",
     "prefecture", "department", "governorate", "oblast", "territory"
@@ -292,7 +342,6 @@ def search_locations(city, limit=7):
     if len(city) < 2:
         return []
 
-    # 1) Normal query
     try:
         primary = _owm_query(city, limit=limit)
         if primary:
@@ -300,7 +349,6 @@ def search_locations(city, limit=7):
     except requests.RequestException:
         return []
 
-    # 2) Fuzzy fallback
     words = [w for w in city.split() if w]
     longest = max(words, key=len) if words else city
     broaden_terms = []
@@ -369,7 +417,7 @@ def pick_best_location(cands, query_city=None):
     if us_citylike:
         states = { (c.get("state") or "").lower() for c in us_citylike }
         if len(states - {""}) > 1:
-            return None  # ambiguous (e.g., Springfield)
+            return None   
         starts = [c for c in us_citylike if c.get("name","").lower().startswith(query)]
         if starts:
             with_state = [c for c in starts if c.get("state")]
@@ -383,7 +431,6 @@ def pick_best_location(cands, query_city=None):
 
     return cands[0]
 
-# --- Routes ---
 @app.route("/")
 def home():
     return render_template("weather_form.html")
@@ -391,17 +438,15 @@ def home():
 @app.route("/get_weather", methods=["GET","POST"])
 def get_weather_page():
     if request.method == "POST":
-        # Support direct lat/lon postback (after user picks)
         lat = request.form.get("lat")
         lon = request.form.get("lon")
-        temp_type = (request.form.get("temp_type") or "c").lower()  # normalize
+        temp_type = (request.form.get("temp_type") or "c").lower()  
 
         if lat and lon:
             city = request.form.get("picked_name") or "Selected location"
             country = request.form.get("picked_country") or ""
             lat = float(lat); lon = float(lon)
         else:
-            # original inputs (country may be absent if you removed it from the form)
             city = (request.form.get("city") or "").strip()
             country = (request.form.get("country") or "").strip()
 
@@ -409,19 +454,16 @@ def get_weather_page():
                 return render_template("error.html", message="Please provide a city (and optional country).")
 
             if city and not country:
-                # city-only flow
                 candidates = search_locations(city, limit=7)
                 if not candidates:
                     return render_template("error.html", message=f"No results for “{city}”.")
                 pick = pick_best_location(candidates, query_city=city)
                 if pick is None:
-                    # ambiguous US city → ask user to choose
                     return render_template("choose_location.html", candidates=candidates, city_query=city)
                 country = pick.get("country", "")
                 lat = float(pick["lat"]); lon = float(pick["lon"])
                 city = pick.get("name") or city
             else:
-                # existing flow (kept)
                 if not city or not country:
                     return render_template("error.html", message="Please provide both city and country.")
                 coordinates = get_coordinates(city, country)
@@ -429,14 +471,14 @@ def get_weather_page():
                     return render_template("error.html", message="Invalid Location")
                 lat, lon = coordinates
 
-        # === original logic unchanged below ===
         ow = get_current_weather(lat, lon)
         om = fetch_forecast_data(lat, lon)
         if not ow or not om:
             return render_template("error.html", message="Weather data could not be loaded.")
 
-        daily_code = om["daily"]["weathercode"][0]
-        description = config.WEATHERCODE_MAP.get(daily_code, "Unknown")
+        local_time = get_local_time(lat, lon)
+
+        description = current_hour_description(om, local_time)
 
         temp_c = om["daily"]["temperature_2m_max"][0]
         temp_k = temp_c + 273.15
@@ -444,8 +486,7 @@ def get_weather_page():
 
         humidity_data = organize_humidity(om)
         rain, sunrise, sunset = organize_rain_and_sun(om)
-        weekly_forecast = organize_weekly_forecast(om, temp_type)
-        local_time = get_local_time(lat, lon)
+        weekly_forcast = organize_weekly_forecast(om, temp_type)
         hourly_forecast = hourly_forcast_list_f(om, local_time, temp_type)
 
         sunrise_time = extract_time_only(sunrise)
@@ -469,11 +510,10 @@ def get_weather_page():
         )
         theme_group = get_theme_group(image_type)
 
-        # --- minimal addition: LOG THE SEARCH ---
         try:
             db = get_session()
             db.add(SearchEvent(
-                user_id=current_user.id if current_user.is_authenticated else None, # if user signed in save that info 
+                user_id=current_user.id if current_user.is_authenticated else None, 
                 city=city,
                 country=country or None,
                 lat=lat,
@@ -482,8 +522,7 @@ def get_weather_page():
             ))
             db.commit()
         except Exception:
-            pass  # keep behavior same: don't break page if logging fails
-
+            pass  
         return render_template(
             "mine.html",
             image_type=image_type,
@@ -494,7 +533,7 @@ def get_weather_page():
             rain=rain,
             sunrise=display_sunrise,
             sunset=display_sunset,
-            weekly_forcast=weekly_forecast,
+            weekly_forcast=weekly_forcast,
             hourly_forecast=hourly_forecast,
             weathercode_map=config.WEATHERCODE_MAP,
             theme_group=theme_group,
@@ -502,7 +541,7 @@ def get_weather_page():
         )
 
     return render_template("weather_form.html")
-# --- helper added just above analytics route ---
+
 def table_has_column(session, table_name: str, column_name: str) -> bool:
     """
     Returns True if the given column exists in the given table,
@@ -521,7 +560,6 @@ def table_has_column(session, table_name: str, column_name: str) -> bool:
 def analytics():
     db = get_session()
 
-    # Top cities (same query style you use elsewhere)
     top_cities = db.execute(
         select(SearchEvent.city, func.count(SearchEvent.id))
         .group_by(SearchEvent.city)
@@ -529,7 +567,6 @@ def analytics():
         .limit(10)
     ).all()
 
-    # Handle missing `country` column gracefully
     has_country = table_has_column(db, "search_event", "country")
 
     if has_country:
@@ -559,4 +596,4 @@ def internal_error(e):
     return render_template("error.html", message="500 - Internal Server Error"), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)

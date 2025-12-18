@@ -4,6 +4,30 @@
 {% block body_class %}{{ image_type }} theme-{{ theme_group }}{% endblock %}
 
 {% block content %}
+
+{# ---- Parse sunrise and sunset into 24-hour integers for this city ---- #}
+{% set sr_parts = sunrise.split(' ') %}
+{% set sr_time = sr_parts[0] %}
+{% set sr_ampm = sr_parts[1] | lower %}
+{% set sr_hour = sr_time.split(':')[0] | int %}
+{% if sr_ampm == 'pm' and sr_hour != 12 %}
+  {% set sr_hour = sr_hour + 12 %}
+{% endif %}
+{% if sr_ampm == 'am' and sr_hour == 12 %}
+  {% set sr_hour = 0 %}
+{% endif %}
+
+{% set ss_parts = sunset.split(' ') %}
+{% set ss_time = ss_parts[0] %}
+{% set ss_ampm = ss_parts[1] | lower %}
+{% set ss_hour = ss_time.split(':')[0] | int %}
+{% if ss_ampm == 'pm' and ss_hour != 12 %}
+  {% set ss_hour = ss_hour + 12 %}
+{% endif %}
+{% if ss_ampm == 'am' and ss_hour == 12 %}
+  {% set ss_hour = 0 %}
+{% endif %}
+
 <div class="right_box">
   <header class="gernal-info">
     <h1 class="title_words">{{ city }}, {{ country }}</h1>
@@ -21,7 +45,10 @@
     {% for day in weekly_forcast %}
       {% set desc = weathercode_map.get(day.weathercode, 'Unknown') %}
       <div class="day_in_a_week_box">
-        <div class="weather_icon_box_daily">{{ weather_icon(desc) }}</div>
+        <div class="weather_icon_box_daily">
+          {# Use noon (12) so weekly icons are always daytime-style #}
+          {{ weather_icon(desc, 12, sr_hour, ss_hour) }}
+        </div>
         <div class="weekly_words_box">
           <div class="day_in_a_week_box_words">
             {{ day.month_day_full }}<br>
@@ -39,9 +66,10 @@
         </div>
       </div>
     {% endfor %}
+  </section>
 
-
-    <form method="POST" action="/get_weather" class="temp-toggle-form">
+  <div class="bottom_section results-bottom">
+    <form method="POST" action="/get_weather" class="testing">
       <input type="hidden" name="city" value="{{ city }}">
       <input type="hidden" name="country" value="{{ country }}">
       <input type="hidden" name="temp_type" value="{{ 'f' if temp_type == 'c' else 'c' }}">
@@ -51,20 +79,42 @@
         <span class="{{ 'active' if temp_type == 'f' else '' }}">°F</span>
       </button>
     </form>
-  
 
-  
-  </section>
+    <div class="auth-links">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+        <a href="{{ url_for('analytics') }}">Analytics</a>
+      {% else %}
+        <a href="{{ url_for('auth.signup') }}">Sign Up</a>
+        <a href="{{ url_for('auth.login') }}">Log In</a>
+      {% endif %}
+    </div>
+  </div>
 
 </div>
 
 <section class="forecast_container" aria-label="Hourly forecast">
   {% set today_date = hourly_forecast[0].date %}
   {% for h in hourly_forecast %}
+
+    {# Convert display_hour like '8:00 PM' into 24-hour local_hour #}
+    {% set hour_str = h.display_hour.split(':')[0] %}
+    {% set is_pm = 'PM' in h.display_hour %}
+    {% set local_hour = hour_str | int %}
+
+    {% if is_pm and local_hour != 12 %}
+      {% set local_hour = local_hour + 12 %}
+    {% endif %}
+    {% if not is_pm and local_hour == 12 %}
+      {% set local_hour = 0 %}
+    {% endif %}
+
     <div class="forecast-box" tabindex="0">
       <p class="forecast_label">{{ "Today" if h.date == today_date else "Tomorrow" }}</p>
       <h3>{{ h.display_hour }}</h3>
-      <div class="weather-icon">{{ weather_icon(h.desc) }}</div>
+      <div class="weather-icon">
+        {{ weather_icon(h.desc, local_hour, sr_hour, ss_hour) }}
+      </div>
       <p>{{ h.temp }}</p>
     </div>
   {% endfor %}
@@ -72,19 +122,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script defer>
-  document.addEventListener('DOMContentLoaded', () => {
-    const boxes = document.querySelectorAll('.forecast-box');
-    boxes.forEach(b => {
-      b.addEventListener('click', () => {
-        boxes.forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-      });
-      b.addEventListener('blur', () => b.classList.remove('active'));
-      b.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { b.click(); }
-      });
-    });
-  });
-</script>
+<script src="{{ url_for('static', filename='js/results-page.js') }}" defer></script>
 {% endblock %}

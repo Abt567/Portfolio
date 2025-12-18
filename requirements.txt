@@ -12,7 +12,5 @@ python-dotenv==1.0.1
 pytz==2024.1
 timezonefinder==6.5.4
 
-# Any JSON/dict utilities (standard lib handles most, no extra needed)
-
-# If you use Jinja2 filters in templates, Flask already brings Jinja2 in
-# If you use Werkzeug for utils, Flask already brings Werkzeug in
+SQLAlchemy==2.0.36
+Flask-Login==0.6.3

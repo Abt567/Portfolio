@@ -1,14 +1,15 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 {% block title %}Search Weather{% endblock %}
-
+{% block body_class %}weather-form-page{% endblock %}
 {% block content %}
-<div class="plant_shadow">
+<div class="page-wrapper">
   <form action="/get_weather" method="POST" class="search-form">
     <h1>Weather Today</h1>
 
     <label for="city-input">City</label>
     <input id="city-input" name="city" placeholder="e.g., Calgary" required>
 
+    <!-- Backend reads this -->
     <input type="hidden" id="temp_type" name="temp_type" value="c">
 
     <div class="toggletwo" role="group" aria-label="Temperature unit">
@@ -17,10 +18,24 @@
     </div>
 
     <button type="submit">Get Weather</button>
+
+    {% if current_user.is_authenticated %}
+      <div class="auth-links">
+        <span>Welcome, {{ current_user.email }}!</span>
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+        <a href="{{ url_for('analytics') }}">Analytics</a>
+      </div>
+    {% else %}
+      <div class="auth-links">
+        <a href="{{ url_for('auth.signup') }}">Sign Up</a>
+        <a href="{{ url_for('auth.login') }}">Log In</a>
+      </div>
+    {% endif %}
   </form>
 </div>
 {% endblock %}
 
 {% block scripts %}
+  {{ super() }}
   <script src="{{ url_for('static', filename='js/form-page.js') }}" defer></script>
 {% endblock %}

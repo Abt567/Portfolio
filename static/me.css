@@ -1,55 +1,61 @@
+/* ----------------------------------------
+   GLOBAL BACKGROUNDS & BODY STATES
+------------------------------------------- */
+
 body.clearcase {
   background-image: url('/static/img/clearcase.jpg');
-
 }
 
-/* Default (desktop/tablet) */
 .plant_shadow {
   min-height: 100vh;
   background-image: url('/static/img/plant_shadow.jpg');
-  background-size: cover;          /* stretch nicely */
-  background-repeat: no-repeat;    /* no repeat */
-  background-position: center;     /* keep centered */
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 15px;
 }
 
-/* Mobile only (≤ 768px wide, touch devices) */
-@media (max-width: 768px) and (pointer: coarse) {
-  .plant_shadow {
-    background-size: cover;
-    background-repeat: repeat;
-    background-position: center;
-    background-color: #f5f2e8;  /* light sand color to hide seams */
-  }
+body.auth-page {
+  overflow: hidden;
+  height: 100vh;
 }
 
-
-
-
-
+body.weather-form-page {
+  min-height: 100vh;
+  overflow-y: auto;
+  height: 100vh;
+  overflow: hidden;
+}
 
 body.cloudycase {
   background-image: url('/static/img/cloudycase.jpg');
 }
 
 body.coldcase {
+  position: relative;
+  overflow: hidden;
+}
+
+body.coldcase::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background-image: url('/static/img/coldcase.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  transform: scaleX(-1);
+  z-index: -1;
 }
 
-body.sunrisecase,
-body.sunsetcase {
-  background-image: url('/static/img/sunsetcase.jpg');
+body.sunriseandsunsetcase {
+  background-image: url("/static/img/sunrise and sunset case.jpg");
 }
-
 
 body.foggycase {
   background-image: url('/static/img/foggycase.jpg');
 }
-
 
 body.raincase {
   background-image: url('/static/img/raincase.jpg');
@@ -69,90 +75,246 @@ body.mooncase {
 }
 
 .theme-polarseasoncase {
-    background: linear-gradient(to bottom, #001d3d, #003566, #5d8aa8);
-    color: white;
+  background: linear-gradient(to bottom, #001d3d, #003566, #5d8aa8);
+  color: white;
 }
-
-
 
 body.defaultcase {
   background-image: url('/static/img/defaultcase.jpg');
 }
 
-/* --- STOP body jumps for all themes --- */
 body.clearcase,
 body.cloudycase,
 body.coldcase,
-body.sunrisecase,
-body.sunsetcase,
+body.sunriseandsunsetcase,
 body.foggycase,
 body.raincase,
 body.snowycase,
 body.sunnycase,
 body.mooncase,
 body.defaultcase {
-  min-height: 100vh;             /* layout height known immediately */
+  min-height: 100vh;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: scroll;
-  background-color: #0a0a0a;     /* neutral fallback; pick 1 matching your imagery */
+  background-color: #0a0a0a;
 }
 
-/* Apply fonts globally */
 body {
   font-family: sans-serif;
 }
 
-/* Use Poppins specifically for larger titles */
 h1, h2, h3, h4, h5, .title_words, .mini-title-box h4 {
   font-family: 'Poppins', sans-serif;
   font-weight: 30;
 }
 
+/* -------------------------------------
+   AUTH PAGES (Login / Signup)
+  -------------------------------------- */
 
-/* ========================================
-rigth side boxes 
-======================================== */
+.log_in_and_sign_up_container {
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
 
+.plant_shadow .back-home-btn_box {
+  position: fixed;
+  top: 2%;
+}
 
+a.back-home-btn {
+  color: #ffffff;
+  padding: 12px;
+}
 
+.log_in_and_sign_up_container .p2 {
+  color: #e53935;
+  font-size: 0.95rem;
+  margin: 0;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 
+  width: 100%;
+  display: block;
+  padding: 0;
+}
+
+button[type="submit"] {
+  width: 100%;
+  margin: 7px;
+  margin-left: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  text-align: center;
+  left: -1%;
+}
+
+/* --------------------------------------
+   SHARED: BACK HOME PILL / LINKS
+   (Used on multiple pages)
+  ---------------------------------------- */
+
+.back-home-btn_box {
+  width: 100px;
+  height: 30px;
+  border-radius: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  margin-left: 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+.back-home-btn {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: 0.2s ease-in-o;
+}
+
+/* -------------------------------------
+   RIGHT SIDE PANEL & WEEKLY FORECAST
+   (Main weather page: mine.html)
+  -------------------------------------- */
 
 .right_box {
-    width: 320px;
-    height: 100vh;           
-    position: fixed;
-    right: 0;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.3); /* Optional: to see content clearer */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-
+  width: 320px;
+  height: 100vh;
+  position: fixed;
+  right: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0px !important;
 }
 
-
-
-.gernal-info{
-    width: 100%;
-    height: 28%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0;
-    padding-top: 10px;
-    text-align: center;
+.testing {
+  display: flex;
+  position: relative;
+  left: 8%;
+  margin-top: 12px;
+  padding: 0;
+  width: fit-content;
 }
 
+.testing .toggle-btn {
+  background: none !important;
+  border: none !important;
+  cursor: pointer;
+  color: white;
 
-.sun-box{
-    width: 50%;
-    height: 30%;
-    margin-top: -8vh;
-    line-height: 90%;
-    text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.testing .toggle-btn span.active {
+  color: #ffe7b0;
+}
+
+.bottom_section form {
+  background: none !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.bottom_section a {
+  color: white;
+  text-decoration: none;
+  margin-left: 8px;
+  font-size: 1.2rem;
+}
+
+.bottom_section a:hover {
+  text-decoration: underline;
+}
+
+.bottom_section {
+  position: fixed;
+  bottom: 20px;
+  top: 90%;
+  left: 46%;
+  transform: translateX(-50%);
+  height: auto;
+  width: 90%;
+  max-width: 420px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0;
+}
+
+.auth-links {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 18px;
+  font-family: "Inter", sans-serif;
+}
+
+.auth-links a {
+  color: #2d2d2d;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: opacity 0.15s ease;
+}
+
+.auth-links a:hover {
+  opacity: 0.65;
+}
+
+.gernal-info {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  padding-top: 10px;
+  text-align: center;
+}
+
+.sun-box {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  line-height: 1;
+}
+
+.sun-box p {
+  margin: 0;
+  padding: 0;
 }
 
 .mini-title-box {
@@ -162,10 +324,10 @@ rigth side boxes
   text-align: center;
   width: 100%;
   height: 50px;
-  overflow: hidden;
+  overflow: visible;
   padding: 0;
   margin: 0;
-  position: relative; /* Needed for positioning the line */
+  position: relative;
   padding-bottom: 7px;
 }
 
@@ -174,22 +336,31 @@ rigth side boxes
   position: absolute;
   bottom: 0;
   left: 15%;
-  width: 70%;  /* 👈 controls the line's length */
+  width: 70%;
   border-bottom: 2px solid rgba(255, 255, 255, 0.4);
 }
 
+.User_info {
+  font-size: 22px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 10px 7px;
+  position: fixed;
+  bottom: 2.7%;
+  right: 0%;
+}
 
-.weekly_forcast_box{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    padding-top: 0;
-    font-family: 'Work Sans', sans-serif;
-    font-weight: 100;  
-
+.weekly_forcast_box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  padding-top: 0;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 100;
 }
 
 .right_box,
@@ -197,42 +368,41 @@ rigth side boxes
   box-sizing: border-box;
 }
 
-.day_in_a_week_box{
-    width: 100%;
-    height: 8%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding-top: 10px;
-    padding-bottom: 7px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4); /* light, semi-transparent */
+.day_in_a_week_box {
+  width: 100%;
+  height: 8%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-.weather_icon_box_daily, .temp_box_weekly  {
-    width: 25%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0;
-    justify-content: center;
+.weather_icon_box_daily,
+.temp_box_weekly {
+  width: 25%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  justify-content: center;
 }
 
-
-
-.weekly_words_box{
-    width: 50%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0;
-    justify-content: center;
+.weekly_words_box {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  justify-content: center;
 }
 
-/* ========================================
-hornintal forcast card boxes 
-======================================== */
+/* -------------------------------------
+   HORIZONTAL HOURLY FORECAST
+  -------------------------------------- */
 
 html, body {
   height: 100%;
@@ -241,17 +411,18 @@ html, body {
 }
 
 .weather-icon {
-  width: 50%;              /* or any % you need */
-  aspect-ratio: 1;         /* keep it square */
+  width: 50%;
+  aspect-ratio: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 5.5vh;          /* ✨ this is the magic */
+  font-size: 5.5vh;
 }
 
 .weather-icon i {
-  line-height: 0;          /* removes vertical spacing */
+  line-height: 0;
 }
+
 .forecast_container {
   position: fixed;
   bottom: 7px;
@@ -267,20 +438,15 @@ html, body {
   padding: 10px;
   gap: 10px;
   padding-bottom: 13px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Hide scrollbar but keep scroll functionality */
 .forecast_container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  display: none;
 }
 
-.forecast_container {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
-  overflow-x: auto;            /* Allow scrolling */
-}
-
-.forecast-box{
+.forecast-box {
   background: rgba(0, 0, 0, 0.22);
   border-radius: 16px;
   color: #ececec;
@@ -293,40 +459,100 @@ html, body {
   padding: 10px 12px;
   min-width: 105px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
 }
 
+/* ----------------------------------------
+   RESPONSIVE: MOBILE (Main weather layout)
+  ----------------------------------------- */
 
-
-
-/* ========================================
- Responsive design for mobile devices 
-======================================== */
 @media (max-width: 768px) and (pointer: coarse) {
+  a.back-home-btn {
+    color: #000;
+  }
+
+  .plant_shadow {
+    background-size: cover;
+    background-repeat: repeat;
+    background-position: center;
+    background-color: #f5f2e8;
+  }
+
+  .User_info {
+    position: fixed;
+    bottom: 0%;
+    right: 0%;
+  }
+
   .right_box {
     width: 100vw;
-    position: relative;       /* NOT fixed */
-    height: auto;             /* Let it grow with content */
+    position: relative;
+    height: 80%;
     z-index: 1;
-    padding: 10px;
-    padding-top:0px ;
+    padding-top: 0px;
     padding-bottom: 0px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4); /* light, semi-transparent */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
     overflow-x: hidden;
-    
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
-    html, body {
+
+  .mini-title-box {
+    padding-top: 0px;
+    height: 20px;
+  }
+
+  .mini-title-box h4 {
+    font-size: 1.8rem;
+  }
+
+  .weekly_forcast_box {
+    padding-bottom: 10px;
+  }
+
+  .sun-box {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
+    line-height: 0.1;
+    padding-bottom: 10px;
+  }
+
+  .gernal-info {
+    padding-top: 12.5px !important;
+  }
+
+  .sun-box p {
+    font-size: 1.3rem;
+  }
+
+  .bottom_section {
+    position: relative;
+    bottom: -10%;
+    left: -5%;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    height: 50px;
+    background-color: transparent;
+    padding-bottom: 0px;
+  }
+
+  html, body {
     overflow-x: hidden;
     width: 100%;
   }
 
   .forecast_container {
-    position: relative;       /* Stack it after right_box */
+    position: relative;
     width: 100vw;
     height: auto;
     display: flex;
-    flex-direction: row;   /* Show forecast cards vertically */
-    overflow-y: auto;         /* Allow vertical scroll */
+    flex-direction: row;
+    overflow-y: auto;
     overflow-x: auto;
     padding: 10px;
     gap: 10px;
@@ -341,7 +567,7 @@ html, body {
     overflow-y: auto;
   }
 
-  .forecast-box{
+  .forecast-box {
     background: rgba(0, 0, 0, 0.22);
     border-radius: 16px;
     color: #ececec;
@@ -354,100 +580,83 @@ html, body {
     padding: 10px 12px;
     min-width: 105px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
-  }
-
-  .day_in_a_week_box{
-    width: 105%;
-    height: 15%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding-top: 10px;
-    padding-bottom: 7px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4); /* light, semi-transparent */
-  }
-
-  .forecast-box {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
   .forecast-box:active {
-    transform: scale(1.05); /* slight zoom on tap */
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3); /* subtle glow */
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     z-index: 10;
   }
 
-  .gernal-info {
-    padding-top: 0;
+  .day_in_a_week_box {
+    width: 105%;
+    height: auto;
+    padding-bottom: 20px;
   }
 
-  .weekly_forcast_box{
+  .weekly_forcast_box {
     border: 2px #000;
   }
-  
+
   .day_in_a_week_box:last-child {
     border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
   }
 
- 
-  .weather_icon_box_daily{
-    font-size: 3vh;          /* control the size of the image weekly one  */
-
+  .weather_icon_box_daily {
+    font-size: 3vh;
   }
 
   .weather-icon {
-    font-size: 4.2vh;          /* the forcast box controls the image size */
+    font-size: 4.2vh;
   }
 
-  .toggle-btn{
+  .toggle-btn {
     bottom: 455px !important;
     right: 10px !important;
   }
 
-
+  p.temp_text_max_min {
+    font-size: 1.05rem;
   }
 
+  .day_in_a_week_box_words {
+    font-size: 1.2rem !important;
+  }
 
-  
-
-
-
-.theme-dark_and_soft .right_box {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  backdrop-filter: blur(10px);
+  .temp-toggle-form {
+    position: fixed;
+    top: 160px;
+    left: 27%;
+    width: 25%;
+    height: 7%;
+  }
 }
 
-/* Example override */
-.theme-dark_and_soft .title_words {
-  color: #fdfdfd;
-  text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
-}
+/*-----------------------------------------
+   THEME GROUPS: BASE TYPOGRAPHY
+  ----------------------------------------- */
 
-
-
-/* ========================================
-    words
-======================================== */
 .title_words {
+  margin: 0 !important;
+  padding: 0 !important;
   text-align: center;
   color: rgb(0, 0, 0);
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 35px;
-  font-weight: 30px;
-  padding-bottom: 10px;
-  margin-top: 3px;
+  font-weight: 30;
+  height: auto;
+  line-height: 1;
+  padding-bottom: 12px !important;
 }
 
+h1.title_words {
+  font-size: 3rem;
+}
 
-
-/* p is for the temp in the foercast box */
-
-
-p{
+p {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -455,62 +664,55 @@ p{
   color: rgb(0, 0, 0);
 }
 
-
-
-
-
-/* h3 is for the time forcast card  */
-h3{
+h3 {
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
-
-.day_in_a_week_box_words{
+.day_in_a_week_box_words {
   text-align: center;
   white-space: nowrap;
   font-family: 'Roboto', sans-serif;
   font-size: 0.9rem;
-} 
+}
 
 .temp_text_title {
+  margin: 0 !important;
+  padding: 0 !important;
+
   text-align: center;
-  color: rgb(0, 0, 0);
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-size: 55px;
-  font-weight: bold;
-  margin-top: -30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  height: auto;
+  line-height: 1;
 }
 
-.temp_text_max_min{
-  text-align: right;
-  line-height: normal;
+.temp_text_title strong {
+  font-size: 3.5rem;
 }
-/* check with tem kind you like*/
+
 .temp_text_max_min {
   text-align: right;
   line-height: 1.4;
   margin: 0;
   padding: 0;
-  font-size: 0.9rem;  /* Optional: scale for readability */
-  color: #fff;        /* Adjust to match theme */
+  font-size: 0.9rem;
+  color: #fff;
 }
 
 .forecast_label {
-  text-align: center;        /* Optional: center the label */
-  margin: 0;                 /* Prevent extra space */
-  padding: 0;                /* Prevent unwanted push */
-  color: #000;               /* Match your default text color */
-  line-height: 1.4; 
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  line-height: 1.4;
   font-size: 1rem;
   font-weight: 400;
-  line-height: 1.5;
-  text-align: center;
-  color: rgb(0, 0, 0);
 }
-
-
 
 h4 {
   margin: 0;
@@ -520,19 +722,9 @@ h4 {
   font-weight: 600;
 }
 
-
-
-
-
-/* ========================================
-theme groups design 
-======================================== */
-
-
-
-/* ========================================
-   DARK AND SOFT THEME (Optimized)
-======================================== */
+/* ----------------------------------------
+   THEME: DARK AND SOFT
+  ----------------------------------------- */
 
 .theme-dark_and_soft {
   background-size: cover;
@@ -543,7 +735,6 @@ theme groups design
   color: white;
 }
 
-/* Text shadows and tone */
 .theme-dark_and_soft,
 .theme-dark_and_soft h1,
 .theme-dark_and_soft h2,
@@ -554,7 +745,6 @@ theme groups design
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
-/* Right box panel */
 .theme-dark_and_soft .right_box {
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -563,29 +753,24 @@ theme groups design
   color: white;
 }
 
-/* Title (City, Country) */
 .theme-dark_and_soft .title_words {
   color: #fdfdfd !important;
   text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
 }
 
-/* Main temperature */
 .theme-dark_and_soft .temp_text_title {
   color: #ffffff !important;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-/* Sunrise/Sunset */
 .theme-dark_and_soft .sun-box {
   color: rgba(255, 255, 255, 0.85);
 }
 
-/* Section title */
 .theme-dark_and_soft .mini-title-box h4 {
   color: #e0e0e0;
 }
 
-/* Day + weather text */
 .theme-dark_and_soft .day_in_a_week_box_words {
   color: rgba(255, 255, 255, 0.92);
 }
@@ -594,17 +779,14 @@ theme groups design
   color: rgba(240, 240, 240, 0.88);
 }
 
-/* Max/Min temperatures */
 .theme-dark_and_soft .temp_text_max_min {
   color: #fff;
 }
 
-/* Today / Tomorrow label */
 .theme-dark_and_soft .forecast_label {
-  color: #cccccc;;
+  color: #cccccc;
 }
 
-/* Hourly forecast cards */
 .theme-dark_and_soft .forecast-box {
   background: rgba(0, 0, 0, 0.22);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -613,25 +795,22 @@ theme groups design
   color: #ececec;
 }
 
-/* Active state (tap) */
 .theme-dark_and_soft .forecast-box.active {
   transform: scale(1.12);
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   z-index: 10;
 }
 
-/* Temperature text in hourly forecast */
 .theme-dark_and_soft .forecast-box p:last-child {
   color: #ffffff;
   font-weight: 600;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
+/* ----------------------------------------
+   THEME: SNOWTYPE
+  -----------------------------------------*/
 
-/* ============================
-   SNOW THEME STYLING
-============================ */
-/* === Main Right Panel Glassmorphism === */
 .theme-snowtype .right_box {
   background: rgba(20, 20, 20, 0.48);
   backdrop-filter: blur(14px);
@@ -640,7 +819,6 @@ theme groups design
   color: #fff;
 }
 
-/* === Title + Temperature === */
 .theme-snowtype .title_words,
 .theme-snowtype .temp_text_title {
   color: #fff;
@@ -652,7 +830,6 @@ theme groups design
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* === Sunrise / Sunset / Paragraphs === */
 .theme-snowtype .sun-box,
 .theme-snowtype .right_box p,
 .theme-snowtype .right_box h4 {
@@ -661,7 +838,6 @@ theme groups design
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* === Forecast Text Styling (Global) === */
 .theme-snowtype p,
 .theme-snowtype li,
 .theme-snowtype span {
@@ -669,7 +845,6 @@ theme groups design
   font-weight: 400;
 }
 
-/* === Weekly Forecast Boxes === */
 .theme-snowtype .weather_icon_box_daily {
   color: #fff;
 }
@@ -690,12 +865,10 @@ theme groups design
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* === Hourly Forecast Box (Glass style) === */
 .theme-snowtype .forecast-box {
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-  color: #ffffff;
   backdrop-filter: blur(6px);
   color: #fff;
 }
@@ -715,7 +888,7 @@ theme groups design
 }
 
 .theme-snowtype .forecast-box p:last-child {
-  color: #ffffff;
+  color: #fff;
   font-weight: 600;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
@@ -731,11 +904,10 @@ theme groups design
   opacity: 0.82;
 }
 
-/* ============================
-   Theme-special-case for mooon-image
-============================ */
+/* --------------------------------------
+   THEME: SPECIAL CASE (Moon / Polar)
+  --------------------------------------- */
 
-/* === Title + Temperature === */
 .theme-special_case .title_words,
 .theme-special_case .temp_text_title,
 .theme-special_case .temp_text_max_min {
@@ -744,7 +916,6 @@ theme groups design
   letter-spacing: 0.3px;
 }
 
-/* === Right Panel Glass Effect === */
 .theme-special_case .right_box {
   background: linear-gradient(to bottom right, rgba(10, 10, 10, 0.65), rgba(20, 20, 20, 0.5));
   backdrop-filter: blur(10px);
@@ -753,7 +924,6 @@ theme groups design
   color: #eeeeee;
 }
 
-/* === Forecast Boxes (Glass Tiles) === */
 .theme-special_case .forecast-box,
 .theme-special_case .forecast-tile {
   background-color: rgba(30, 30, 30, 0.55);
@@ -764,7 +934,6 @@ theme groups design
   backdrop-filter: blur(6px);
 }
 
-/* === Labels, Subheadings, Small Text === */
 .theme-special_case .section-title,
 .theme-special_case .label,
 .theme-special_case .small-text {
@@ -773,13 +942,11 @@ theme groups design
   font-weight: 500;
 }
 
-/* === Global Text Tint (Moon Theme) === */
 .theme-special_case,
 .theme-special_case * {
   color: #d8d8d8 !important;
 }
 
-/* === Headings === */
 .theme-special_case h1,
 .theme-special_case h2,
 .theme-special_case h3 {
@@ -791,60 +958,32 @@ theme groups design
   color: #ffffff !important;
 }
 
-/* Make the form visually disappear */
-.temp-toggle-form{
-  border: 0 !important;
-  box-shadow: none !important;
-  width: 30%;
-  position: fixed;
-  bottom: -10px;
-  left: -10px;
-  border-radius: 25%;
-  background: none !important; 
-}
-
-.toggle-btn{
-    background: rgba(255,255,255,0.16) !important; 
-}
-
-@media (max-width: 768px) and (pointer: coarse) {
-  .temp-toggle-form{
-    position: fixed;
-    top: 160px;
-    left: 27%;
-    width:25%;
-    height: 7%;
-    
-  }
-  .sun-box{
-    gap: 3px;
-  }
-
-}
-
-
+/* ---------------------------------------
+   WEATHER FORM PAGE (weather_form.html)
+  ---------------------------------------- */
 
 .search-form {
   background: white;
   padding: 40px;
+  padding-top: 30px;
+  padding-bottom: 25px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   max-width: 500px;
-  margin: 20px auto; /* centers it */
+  margin: 20px auto;
   text-align: center;
 }
 
 form.search-form h1 {
-    font-size: 45px !important;
-    font-weight: 350;
-    margin-top: -20px;
-    font-family: Playfair Display;
-    padding: 0;
+  font-size: 45px !important;
+  font-weight: 350;
+  margin-top: -20px;
+  font-family: Playfair Display;
+  padding: 0;
 }
 
-/* Container */
 .toggletwo {
-  background-color: none !important; /* dark navy */
+  background-color: none !important;
   min-height: 50px;
   display: flex;
   justify-content: center;
@@ -853,35 +992,188 @@ form.search-form h1 {
   border-radius: 8px;
 }
 
-/* Both buttons */
 #btn-c, #btn-f {
-  background-color: #3399ff;   /* slightly darker blue */
-  color: white;                /* text color */
-  border: none;                /* remove default border */
-  border-radius: 6px;          /* rounded corners */
-  padding: 8px 16px;           /* spacing inside */
-  font-size: 20px;             /* text size */
-  cursor: pointer;             /* pointer on hover */
+  background-color: #3399ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 20px;
+  cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover effect */
 #btn-c:hover, #btn-f:hover {
-  background-color: #3399ff;   /* slightly darker blue */
-  transform: scale(1.05);      /* little pop */
+  background-color: #3399ff;
+  transform: scale(1.05);
 }
 
-/* Active button (you already toggle .active in JS) */
 #btn-c.active, #btn-f.active {
-  background-color: #037bf4;   /* slightly darker blue */
+  background-color: #037bf4;
 }
 
 .error-message {
   font-size: 1.9rem;
-  color: #000000;       /* bootstrap-like red */
+  color: #000000;
   font-weight: 300;
-  margin: 12px 0;       /* spacing above & below */
-  text-align: center;   /* center in the box */
-  font-family:  Playfair Display;
+  margin: 12px 0;
+  text-align: center;
+  font-family: Playfair Display;
   margin-top: -10px;
+}
+
+/* ----------------------------------------
+   ANALYTICS PAGE (analytics.html)
+  ----------------------------------------- */
+
+body.analytics-page {
+  min-height: 100%;
+  background-image: url('/static/img/plant_shadow.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-attachment: fixed;
+  background-color: #d9d0c3;
+  padding: 0px;
+  overflow: hidden;
+}
+
+.analytics-page {
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+
+.analytics-wrapper {
+  min-height: 100vh;
+  max-height: 100vh;
+  padding: 20px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+
+.analytics-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.analytics-wrapper {
+  scrollbar-width: none;
+}
+
+
+.analytics-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.analytics-header h1 {
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.analytics-subtitle {
+  margin-top: 4px;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+
+.analytics-grid {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .analytics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+.analytics-card {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  color: white;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+
+.analytics-card-title {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+
+.analytics-empty {
+  opacity: 0.8;
+  font-style: italic;
+}
+
+
+.analytics-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.analytics-table th,
+.analytics-table td {
+  padding: 8px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.analytics-table th {
+  text-align: left;
+  font-weight: 600;
+}
+
+.analytics-table-right {
+  text-align: right;
+}
+
+/* ---------------------------------------
+   CHOOSE LOCATION PAGE 
+  --------------------------------------- */
+
+.results-bottom .auth-links {
+  gap: 14px;
+  margin-top: 10px;
+  opacity: 0.8;
+  width: fit-content;
+}
+
+.results-bottom .auth-links a {
+  color: #ffffff;
+  font-size: 1.02rem;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  transition: opacity 0.2s ease;
+  text-align: end;
+}
+
+.results-bottom .auth-links a:hover {
+  opacity: 0.55;
+}
+
+.possible-location-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.chose_location_back_home {
+  margin-top: 12px;
 }

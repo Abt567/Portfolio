@@ -1,4 +1,4 @@
-/* === Base Page Styling === */
+/* Base Page Styling*/
 html,
 body {
     height: 100%;
@@ -32,7 +32,7 @@ h1 {
     letter-spacing: 1px;
 }
 
-/* === Form Container === */
+/*  Form Container  */
 form {
     background-color: rgba(255, 255, 255, 0.9);
     padding-top: 0px;
@@ -45,7 +45,7 @@ form {
     text-align: center;
 }
 
-/* === Input Fields and Dropdown === */
+/* Input Fields and Dropdown */
 input, select {
     width: 100%;
     padding: 10px;
@@ -55,7 +55,7 @@ input, select {
     font-size: 16px;
 }
 
-/* === Buttons === */
+/* Buttons */
 button[type="submit"] {
     width: 100%;
     background-color: #007BFF;
@@ -73,7 +73,7 @@ button[type="submit"]:hover {
     background-color: #0056b3;
 }
 
-/* === Toggle Buttons (C / F) === */
+/* Toggle Buttons (C / F) */
 .toggle-container {
     margin-top: 10px;
 }
@@ -96,7 +96,7 @@ button[type="submit"]:hover {
     color: white;
 }
 
-/* === Error Message === */
+/* Error Message */
 .error {
     color: red;
     margin-top: 10px;

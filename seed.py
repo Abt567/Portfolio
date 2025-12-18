@@ -18,12 +18,12 @@ def main():
         )
         s.add(user)
         s.commit()
-        print("✅ Created demo user: demo@demo.com / Demo123!")
+        print("Created demo user: demo@demo.com / Demo123!")
     else:
-        print("ℹ️ Demo user already exists — no action needed.")
+        print("ℹ Demo user already exists — no action needed.")
 
     s.close()
-    print("✅ Demo seed complete (user only).")
+    print("Demo seed complete (user only).")
 
 if __name__ == "__main__":
     main()

@@ -20,13 +20,13 @@
     <button type="submit">Get Weather</button>
 
     {% if current_user.is_authenticated %}
-      <div style="display:flex; gap:12px; justify-content:center; align-items:center; margin:10px 0;">
+      <div class="auth-links">
         <span>Welcome, {{ current_user.email }}!</span>
         <a href="{{ url_for('auth.logout') }}">Logout</a>
         <a href="{{ url_for('analytics') }}">Analytics</a>
       </div>
     {% else %}
-      <div style="display:flex; gap:12px; justify-content:center; align-items:center; margin:10px 0;">
+      <div class="auth-links">
         <a href="{{ url_for('auth.signup') }}">Sign Up</a>
         <a href="{{ url_for('auth.login') }}">Log In</a>
       </div>
@@ -37,5 +37,5 @@
 
 {% block scripts %}
   {{ super() }}
-<script src="{{ url_for('static', filename='js/form-page.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/form-page.js') }}" defer></script>
 {% endblock %}

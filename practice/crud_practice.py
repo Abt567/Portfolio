@@ -1,6 +1,7 @@
 # models_core.py
 # SQLAlchemy Core table definitions + helper functions for engine + schema creation.
-
+# NOTE: Practice file for learning SQLAlchemy Core.
+# Not imported or used by the main weather app.
 from __future__ import annotations
 from sqlalchemy import (
     Table, Column, Integer, String, Float, Text, DateTime, ForeignKey, MetaData,

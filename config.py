@@ -1,4 +1,6 @@
 # config.py
+# Central place to store constants and shared settings
+# (API endpoints, weather code map, and other values used across the app).
 
 SUN_WINDOW_MINUTES = 20
 

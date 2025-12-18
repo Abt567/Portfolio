@@ -1,5 +1,5 @@
-# cache_service.py
-import json, datetime as dt
+# NOTE: Practice file for learning SQLAlchemy Core.
+# Not imported or used by the main weather app.import json, datetime as dt
 from sqlalchemy import select, delete
 from models_core import WeatherCache, get_session
 

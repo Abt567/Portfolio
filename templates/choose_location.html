@@ -5,7 +5,6 @@
   <div class="search-form">
     <h1>Which {{ city_query }}?</h1>
     <p class="error-message">Select the correct city below:</p>
-
     <div class="possible-location-box">
       {% for c in candidates %}
         <form action="{{ url_for('get_weather_page') }}" method="POST" style="width:100%; max-width:420px;">
@@ -24,9 +23,10 @@
       {% endfor %}
     </div>
 
-    <div class="chose_location_back_home">
+    <div class="auth-links">
       <a href="{{ url_for('home') }}">Back</a>
     </div>
+  
   </div>
 </div>
 {% endblock %}

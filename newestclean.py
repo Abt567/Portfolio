@@ -9,9 +9,8 @@ from services.weather_service import (
 )
 
 from flask import Flask, request, render_template, flash
-from jinja2 import TemplateNotFound
 import os, time, requests, pytz, difflib
-from datetime import datetime, timedelta
+from datetime import datetime
 from timezonefinder import TimezoneFinder
 from dotenv import load_dotenv
 import config
@@ -19,14 +18,14 @@ import config
 from flask_login import LoginManager, current_user, login_required
 from sqlalchemy import func, select, inspect
 
-from models_core import init_db, get_session, User, SearchEvent, ObservationLog
+from models_core import init_db, get_session, User, SearchEvent
 from auth import bp as auth_bp
 
 # Main Flask app for the weather dashboard:
 # - Handles city search, geocoding, API calls, theming, and analytics.
 
 
-# --- Setup ---
+# Setup 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
 if not API_KEY:
@@ -35,7 +34,7 @@ if not API_KEY:
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = os.getenv("FLASK_SECRET", "dev")
 
-# --- DB + Login setup ---
+#  DB + Login setup 
 init_db()
 
 login_manager = LoginManager()
@@ -68,8 +67,6 @@ _future_day = future_day_gen()
 
 def future_day():
     return next(_future_day)
-
-
 
 
 def organize_rain_and_sun(data):

@@ -1,34 +1,19 @@
-/* ----------------------------------------
+/* ========================================
    GLOBAL BACKGROUNDS & BODY STATES
-------------------------------------------- */
+======================================== */
 
-body.clearcase {
-  background-image: url('/static/img/clearcase.jpg');
-}
+body.clearcase { background-image: url('/static/img/clearcase.jpg'); }
+body.cloudycase { background-image: url('/static/img/cloudycase.jpg'); }
+body.sunriseandsunsetcase { background-image: url("/static/img/sunrise and sunset case.jpg"); }
+body.foggycase { background-image: url('/static/img/foggycase.jpg'); }
+body.raincase { background-image: url('/static/img/raincase.jpg'); }
+body.snowycase { background-image: url('/static/img/snowycase.jpg'); }
+body.sunnycase { background-image: url('/static/img/sunnycase.jpg'); }
+body.defaultcase { background-image: url('/static/img/defaultcase.jpg'); }
 
-.plant_shadow {
-  min-height: 100vh;
-  background-image: url('/static/img/plant_shadow.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  padding: 15px;
-}
-
-body.auth-page {
-  overflow: hidden;
-  height: 100vh;
-}
-
-body.weather-form-page {
-  min-height: 100vh;
-  overflow-y: auto;
-  height: 100vh;
-  overflow: hidden;
-}
-
-body.cloudycase {
-  background-image: url('/static/img/cloudycase.jpg');
+body.mooncase {
+  background-image: url('/static/img/mooncase.jpg');
+  color: #fff;
 }
 
 body.coldcase {
@@ -44,34 +29,8 @@ body.coldcase::before {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-
   transform: scaleX(-1);
   z-index: -1;
-}
-
-body.sunriseandsunsetcase {
-  background-image: url("/static/img/sunrise and sunset case.jpg");
-}
-
-body.foggycase {
-  background-image: url('/static/img/foggycase.jpg');
-}
-
-body.raincase {
-  background-image: url('/static/img/raincase.jpg');
-}
-
-body.snowycase {
-  background-image: url('/static/img/snowycase.jpg');
-}
-
-body.sunnycase {
-  background-image: url('/static/img/sunnycase.jpg');
-}
-
-body.mooncase {
-  background-image: url('/static/img/mooncase.jpg');
-  color: #fff;
 }
 
 .theme-polarseasoncase {
@@ -79,10 +38,7 @@ body.mooncase {
   color: white;
 }
 
-body.defaultcase {
-  background-image: url('/static/img/defaultcase.jpg');
-}
-
+/* Shared background behavior */
 body.clearcase,
 body.cloudycase,
 body.coldcase,
@@ -101,18 +57,62 @@ body.defaultcase {
   background-color: #0a0a0a;
 }
 
-body {
-  font-family: sans-serif;
+.plant_shadow {
+  min-height: 100vh;
+  background-image: url('/static/img/plant_shadow.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 15px;
 }
 
-h1, h2, h3, h4, h5, .title_words, .mini-title-box h4 {
+body.auth-page {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.weather-form-page {
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* --------------------------------------
+   GLOBAL RESET / PAGE BEHAVIOR
+----------------------------------------- */
+
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+  height: auto;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: sans-serif;
+  min-height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+.title_words,
+.mini-title-box h4 {
   font-family: 'Poppins', sans-serif;
   font-weight: 30;
 }
 
-/* -------------------------------------
+/* --------------------------------------
    AUTH PAGES (Login / Signup)
-  -------------------------------------- */
+------------------------------------------ */
 
 .log_in_and_sign_up_container {
   min-height: 90vh;
@@ -122,14 +122,12 @@ h1, h2, h3, h4, h5, .title_words, .mini-title-box h4 {
   gap: 0;
 }
 
-.plant_shadow .back-home-btn_box {
-  position: fixed;
-  top: 2%;
-}
-
-a.back-home-btn {
-  color: #ffffff;
-  padding: 12px;
+body.auth-page .back-home-btn_box {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  margin: 0;
+  z-index: 50;
 }
 
 .log_in_and_sign_up_container .p2 {
@@ -139,7 +137,6 @@ a.back-home-btn {
   text-align: center;
   font-weight: 500;
   letter-spacing: 0.3px;
-
   width: 100%;
   display: block;
   padding: 0;
@@ -159,8 +156,7 @@ button[type="submit"] {
 
 /* --------------------------------------
    SHARED: BACK HOME PILL / LINKS
-   (Used on multiple pages)
-  ---------------------------------------- */
+---------------------------------------- */
 
 .back-home-btn_box {
   width: 100px;
@@ -173,8 +169,8 @@ button[type="submit"] {
   justify-content: center;
   margin-bottom: 25px;
   margin-left: 20px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .back-home-btn {
@@ -184,16 +180,16 @@ button[type="submit"] {
   font-weight: 500;
   letter-spacing: 0.5px;
   transition: 0.2s ease-in-o;
+  padding: 12px;
 }
 
 /* -------------------------------------
    RIGHT SIDE PANEL & WEEKLY FORECAST
-   (Main weather page: mine.html)
-  -------------------------------------- */
+---------------------------------------- */
 
 .right_box {
   width: 320px;
-  height: 100vh;
+  height: var(--vvh, 100vh);
   position: fixed;
   right: 0;
   top: 0;
@@ -203,6 +199,7 @@ button[type="submit"] {
   align-items: center;
   text-align: center;
   gap: 0px !important;
+  box-sizing: border-box;
 }
 
 .testing {
@@ -219,20 +216,30 @@ button[type="submit"] {
   border: none !important;
   cursor: pointer;
   color: white;
-
   font-size: 1.5rem;
   font-weight: 600;
-
   display: flex;
   align-items: center;
   gap: 6px;
-
   padding: 0 !important;
   margin: 0 !important;
 }
 
-.testing .toggle-btn span.active {
-  color: #ffe7b0;
+.testing .toggle-btn span.active { color: #ffe7b0; }
+
+.bottom_section {
+  position: fixed;
+  bottom: 20px;
+  top: 90%;
+  left: 46%;
+  transform: translateX(-50%);
+  height: auto;
+  width: 90%;
+  max-width: 420px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
 }
 
 .bottom_section form {
@@ -248,25 +255,7 @@ button[type="submit"] {
   font-size: 1.2rem;
 }
 
-.bottom_section a:hover {
-  text-decoration: underline;
-}
-
-.bottom_section {
-  position: fixed;
-  bottom: 20px;
-  top: 90%;
-  left: 46%;
-  transform: translateX(-50%);
-  height: auto;
-  width: 90%;
-  max-width: 420px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 0;
-}
+.bottom_section a:hover { text-decoration: underline; }
 
 .auth-links {
   display: flex;
@@ -287,9 +276,7 @@ button[type="submit"] {
   transition: opacity 0.15s ease;
 }
 
-.auth-links a:hover {
-  opacity: 0.65;
-}
+.auth-links a:hover { opacity: 0.65; }
 
 .gernal-info {
   width: 100%;
@@ -312,10 +299,7 @@ button[type="submit"] {
   line-height: 1;
 }
 
-.sun-box p {
-  margin: 0;
-  padding: 0;
-}
+.sun-box p { margin: 0; padding: 0; }
 
 .mini-title-box {
   display: flex;
@@ -358,13 +342,8 @@ button[type="submit"] {
   flex-direction: column;
   align-items: center;
   padding: 0;
-  padding-top: 0;
   font-family: 'Work Sans', sans-serif;
   font-weight: 100;
-}
-
-.right_box,
-.weekly_forcast_box {
   box-sizing: border-box;
 }
 
@@ -386,8 +365,8 @@ button[type="submit"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0;
   justify-content: center;
+  padding: 0;
 }
 
 .weekly_words_box {
@@ -396,19 +375,13 @@ button[type="submit"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0;
   justify-content: center;
-}
-
-/* -------------------------------------
-   HORIZONTAL HOURLY FORECAST
-  -------------------------------------- */
-
-html, body {
-  height: 100%;
-  margin: 0;
   padding: 0;
 }
+
+/* ----------------------------------------
+   HORIZONTAL HOURLY FORECAST
+------------------------------------------- */
 
 .weather-icon {
   width: 50%;
@@ -419,9 +392,7 @@ html, body {
   font-size: 5.5vh;
 }
 
-.weather-icon i {
-  line-height: 0;
-}
+.weather-icon i { line-height: 0; }
 
 .forecast_container {
   position: fixed;
@@ -436,15 +407,14 @@ html, body {
   z-index: 9999;
   overflow-x: auto;
   padding: 10px;
-  gap: 10px;
   padding-bottom: 13px;
+  gap: 10px;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  box-sizing: border-box;
 }
 
-.forecast_container::-webkit-scrollbar {
-  display: none;
-}
+.forecast_container::-webkit-scrollbar { display: none; }
 
 .forecast-box {
   background: rgba(0, 0, 0, 0.22);
@@ -461,13 +431,79 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* ----------------------------------------
-   RESPONSIVE: MOBILE (Main weather layout)
-  ----------------------------------------- */
+@media (min-width: 769px) {
+  .forecast_container {
+    height: 240px;
+    padding-top: 14px;
+    padding-bottom: 16px;
+  }
 
-@media (max-width: 768px) and (pointer: coarse) {
-  a.back-home-btn {
-    color: #000;
+  .forecast-box {
+    height: 92%;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 768px) and (pointer: coarse) and (orientation: portrait) {
+  .forecast-box { gap: 6px; justify-content: flex-start; }
+  .forecast-box p { margin: 0; }
+  .forecast-box .weather-icon { margin: 0; padding: 0; }
+  .forecast-box p:last-child { margin-top: -4px; }
+}
+
+/* ------------------------------------------
+   NOTCH / ISLAND PROTECTION (LANDSCAPE ONLY)
+---------------------------------------------- */
+
+@media (pointer: coarse) and (orientation: landscape) {
+  .right_box { padding-right: env(safe-area-inset-right); }
+
+  .forecast_container {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .bottom_section {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* ---------------------------------------
+   RESPONSIVE: MOBILE (Main weather layout)
+------------------------------------------- */
+
+@media (max-width: 768px) and (pointer: coarse) and (orientation: portrait) {
+  a.back-home-btn { color: #000; }
+
+  body { min-height: 100dvh; }
+
+  .bottom_section.results-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .bottom_section.results-bottom form.testing {
+    position: static !important;
+    left: auto !important;
+    margin: 0 !important;
+    width: auto !important;
+  }
+
+  .bottom_section.results-bottom .toggle-btn {
+    position: static !important;
+    margin: 0 !important;
+    padding: 6px 10px !important;
+  }
+
+  .bottom_section.results-bottom .auth-links {
+    margin-top: 0 !important;
+    width: auto !important;
+    justify-content: flex-end;
   }
 
   .plant_shadow {
@@ -481,20 +517,23 @@ html, body {
     position: fixed;
     bottom: 0%;
     right: 0%;
+    z-index: 50;
   }
 
   .right_box {
-    width: 100vw;
+    width: 100%;
+    max-width: 100%;
     position: relative;
-    height: 80%;
+    height: auto;
+    max-height: none;
+    overflow: visible;
     z-index: 1;
     padding-top: 0px;
     padding-bottom: 0px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-    overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .mini-title-box {
@@ -502,12 +541,11 @@ html, body {
     height: 20px;
   }
 
-  .mini-title-box h4 {
-    font-size: 1.8rem;
-  }
+  .mini-title-box h4 { font-size: 1.8rem; }
 
   .weekly_forcast_box {
     padding-bottom: 10px;
+    border: 2px #000;
   }
 
   .sun-box {
@@ -521,66 +559,41 @@ html, body {
     padding-bottom: 10px;
   }
 
-  .gernal-info {
-    padding-top: 12.5px !important;
-  }
-
-  .sun-box p {
-    font-size: 1.3rem;
-  }
+  .gernal-info { padding-top: 12.5px !important; }
+  .sun-box p { font-size: 1.3rem; }
 
   .bottom_section {
-    position: relative;
-    bottom: -10%;
-    left: -5%;
+    position: sticky;
+    bottom: 0;
+    left: 0;
     transform: none;
     width: 100%;
-    max-width: 100%;
-    height: 50px;
+    height: auto;
     background-color: transparent;
     padding-bottom: 0px;
-  }
-
-  html, body {
-    overflow-x: hidden;
-    width: 100%;
+    z-index: 20;
   }
 
   .forecast_container {
     position: relative;
-    width: 100vw;
+    width: 100%;
     height: auto;
     display: flex;
     flex-direction: row;
-    overflow-y: auto;
     overflow-x: auto;
+    overflow-y: hidden;
     padding: 10px;
     gap: 10px;
     border: none;
     z-index: 0;
-  }
-
-  html, body {
-    height: auto;
-    margin: 0;
-    padding: 0;
-    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .forecast-box {
-    background: rgba(0, 0, 0, 0.22);
-    border-radius: 16px;
-    color: #ececec;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    width: 50%;
+    width: auto;
     height: 100%;
-    padding: 10px 12px;
-    min-width: 105px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 0 0 auto;
   }
 
   .forecast-box:active {
@@ -589,14 +602,32 @@ html, body {
     z-index: 10;
   }
 
+  .toggle-btn {
+    position: static !important;
+    bottom: auto !important;
+    right: auto !important;
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bottom_section.results-bottom .auth-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    text-align: right;
+  }
+
   .day_in_a_week_box {
     width: 105%;
     height: auto;
     padding-bottom: 20px;
-  }
-
-  .weekly_forcast_box {
-    border: 2px #000;
   }
 
   .day_in_a_week_box:last-child {
@@ -605,26 +636,11 @@ html, body {
     padding-bottom: 0;
   }
 
-  .weather_icon_box_daily {
-    font-size: 3vh;
-  }
+  .weather_icon_box_daily { font-size: 3vh; }
+  .weather-icon { font-size: 4.2vh; }
 
-  .weather-icon {
-    font-size: 4.2vh;
-  }
-
-  .toggle-btn {
-    bottom: 455px !important;
-    right: 10px !important;
-  }
-
-  p.temp_text_max_min {
-    font-size: 1.05rem;
-  }
-
-  .day_in_a_week_box_words {
-    font-size: 1.2rem !important;
-  }
+  p.temp_text_max_min { font-size: 1.05rem; }
+  .day_in_a_week_box_words { font-size: 1.2rem !important; }
 
   .temp-toggle-form {
     position: fixed;
@@ -632,16 +648,18 @@ html, body {
     left: 27%;
     width: 25%;
     height: 7%;
+    z-index: 60;
   }
 }
 
-/*-----------------------------------------
+/* ---------------------------------------
    THEME GROUPS: BASE TYPOGRAPHY
-  ----------------------------------------- */
+------------------------------------------ */
 
 .title_words {
   margin: 0 !important;
   padding: 0 !important;
+  padding-bottom: 12px !important;
   text-align: center;
   color: rgb(0, 0, 0);
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -649,12 +667,9 @@ html, body {
   font-weight: 30;
   height: auto;
   line-height: 1;
-  padding-bottom: 12px !important;
 }
 
-h1.title_words {
-  font-size: 3rem;
-}
+h1.title_words { font-size: 3rem; }
 
 p {
   font-size: 1rem;
@@ -672,28 +687,37 @@ h3 {
 
 .day_in_a_week_box_words {
   text-align: center;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   font-family: 'Roboto', sans-serif;
   font-size: 0.9rem;
+  line-height: 1.15;
+}
+
+.weekly_words_box {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.temp_box_weekly {
+  flex: 0 0 92px;
+  min-width: 92px;
 }
 
 .temp_text_title {
   margin: 0 !important;
   padding: 0 !important;
-
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-
   height: auto;
   line-height: 1;
 }
 
-.temp_text_title strong {
-  font-size: 3.5rem;
-}
+.temp_text_title strong { font-size: 3.5rem; }
 
 .temp_text_max_min {
   text-align: right;
@@ -722,9 +746,9 @@ h4 {
   font-weight: 600;
 }
 
-/* ----------------------------------------
+/* -------------------------------------
    THEME: DARK AND SOFT
-  ----------------------------------------- */
+---------------------------------------- */
 
 .theme-dark_and_soft {
   background-size: cover;
@@ -763,29 +787,12 @@ h4 {
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-.theme-dark_and_soft .sun-box {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.theme-dark_and_soft .mini-title-box h4 {
-  color: #e0e0e0;
-}
-
-.theme-dark_and_soft .day_in_a_week_box_words {
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.theme-dark_and_soft .weather_description {
-  color: rgba(240, 240, 240, 0.88);
-}
-
-.theme-dark_and_soft .temp_text_max_min {
-  color: #fff;
-}
-
-.theme-dark_and_soft .forecast_label {
-  color: #cccccc;
-}
+.theme-dark_and_soft .sun-box { color: rgba(255, 255, 255, 0.85); }
+.theme-dark_and_soft .mini-title-box h4 { color: #e0e0e0; }
+.theme-dark_and_soft .day_in_a_week_box_words { color: rgba(255, 255, 255, 0.92); }
+.theme-dark_and_soft .weather_description { color: rgba(240, 240, 240, 0.88); }
+.theme-dark_and_soft .temp_text_max_min { color: #fff; }
+.theme-dark_and_soft .forecast_label { color: #cccccc; }
 
 .theme-dark_and_soft .forecast-box {
   background: rgba(0, 0, 0, 0.22);
@@ -807,9 +814,9 @@ h4 {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* ----------------------------------------
+/* --------------------------------------
    THEME: SNOWTYPE
-  -----------------------------------------*/
+----------------------------------------- */
 
 .theme-snowtype .right_box {
   background: rgba(20, 20, 20, 0.48);
@@ -826,9 +833,7 @@ h4 {
   text-shadow: 0 2px 7px rgba(0, 0, 0, 0.65);
 }
 
-.theme-snowtype .temp_text_title {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-}
+.theme-snowtype .temp_text_title { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); }
 
 .theme-snowtype .sun-box,
 .theme-snowtype .right_box p,
@@ -845,9 +850,7 @@ h4 {
   font-weight: 400;
 }
 
-.theme-snowtype .weather_icon_box_daily {
-  color: #fff;
-}
+.theme-snowtype .weather_icon_box_daily { color: #fff; }
 
 .theme-snowtype .day_in_a_week_box_words {
   color: rgba(255, 255, 255, 0.92);
@@ -878,9 +881,7 @@ h4 {
   box-shadow: 0 0 0 3px #fff, 0 4px 20px rgba(0, 0, 0, 0.55);
 }
 
-.theme-snowtype .forecast-box .weather-icon {
-  color: #fff;
-}
+.theme-snowtype .forecast-box .weather-icon { color: #fff; }
 
 .theme-snowtype .forecast-box p {
   color: #fff !important;
@@ -906,7 +907,7 @@ h4 {
 
 /* --------------------------------------
    THEME: SPECIAL CASE (Moon / Polar)
-  --------------------------------------- */
+----------------------------------------- */
 
 .theme-special_case .title_words,
 .theme-special_case .temp_text_title,
@@ -943,9 +944,7 @@ h4 {
 }
 
 .theme-special_case,
-.theme-special_case * {
-  color: #d8d8d8 !important;
-}
+.theme-special_case * { color: #d8d8d8 !important; }
 
 .theme-special_case h1,
 .theme-special_case h2,
@@ -954,77 +953,11 @@ h4 {
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
 }
 
-.theme-special_case .weather_icon_box_daily i {
-  color: #ffffff !important;
-}
+.theme-special_case .weather_icon_box_daily i { color: #ffffff !important; }
 
-/* ---------------------------------------
-   WEATHER FORM PAGE (weather_form.html)
-  ---------------------------------------- */
-
-.search-form {
-  background: white;
-  padding: 40px;
-  padding-top: 30px;
-  padding-bottom: 25px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  max-width: 500px;
-  margin: 20px auto;
-  text-align: center;
-}
-
-form.search-form h1 {
-  font-size: 45px !important;
-  font-weight: 350;
-  margin-top: -20px;
-  font-family: Playfair Display;
-  padding: 0;
-}
-
-.toggletwo {
-  background-color: none !important;
-  min-height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  border-radius: 8px;
-}
-
-#btn-c, #btn-f {
-  background-color: #3399ff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-#btn-c:hover, #btn-f:hover {
-  background-color: #3399ff;
-  transform: scale(1.05);
-}
-
-#btn-c.active, #btn-f.active {
-  background-color: #037bf4;
-}
-
-.error-message {
-  font-size: 1.9rem;
-  color: #000000;
-  font-weight: 300;
-  margin: 12px 0;
-  text-align: center;
-  font-family: Playfair Display;
-  margin-top: -10px;
-}
-
-/* ----------------------------------------
+/* -------------------------------------
    ANALYTICS PAGE (analytics.html)
-  ----------------------------------------- */
+---------------------------------------- */
 
 body.analytics-page {
   min-height: 100%;
@@ -1038,11 +971,7 @@ body.analytics-page {
   overflow: hidden;
 }
 
-.analytics-page {
-  min-height: 100%;
-  box-sizing: border-box;
-}
-
+.analytics-page { min-height: 100%; box-sizing: border-box; }
 
 .analytics-wrapper {
   min-height: 100vh;
@@ -1052,17 +981,10 @@ body.analytics-page {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-}
-
-
-.analytics-wrapper::-webkit-scrollbar {
-  display: none;
-}
-
-.analytics-wrapper {
   scrollbar-width: none;
 }
 
+.analytics-wrapper::-webkit-scrollbar { display: none; }
 
 .analytics-header {
   text-align: center;
@@ -1081,7 +1003,6 @@ body.analytics-page {
   opacity: 0.85;
 }
 
-
 .analytics-grid {
   width: 100%;
   max-width: 1000px;
@@ -1092,11 +1013,8 @@ body.analytics-page {
 }
 
 @media (min-width: 768px) {
-  .analytics-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+  .analytics-grid { grid-template-columns: 1fr 1fr; }
 }
-
 
 .analytics-card {
   background: rgba(0, 0, 0, 0.45);
@@ -1107,19 +1025,16 @@ body.analytics-page {
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-
 .analytics-card-title {
   font-size: 1.2rem;
   margin-bottom: 12px;
   font-weight: 600;
 }
 
-
 .analytics-empty {
   opacity: 0.8;
   font-style: italic;
 }
-
 
 .analytics-table {
   width: 100%;
@@ -1133,18 +1048,12 @@ body.analytics-page {
   border-bottom: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-.analytics-table th {
-  text-align: left;
-  font-weight: 600;
-}
+.analytics-table th { text-align: left; font-weight: 600; }
+.analytics-table-right { text-align: right; }
 
-.analytics-table-right {
-  text-align: right;
-}
-
-/* ---------------------------------------
-   CHOOSE LOCATION PAGE 
-  --------------------------------------- */
+/* --------------------------------------
+   CHOOSE LOCATION PAGE
+------------------------------------------ */
 
 .results-bottom .auth-links {
   gap: 14px;
@@ -1162,18 +1071,342 @@ body.analytics-page {
   text-align: end;
 }
 
-.results-bottom .auth-links a:hover {
-  opacity: 0.55;
-}
+.results-bottom .auth-links a:hover { opacity: 0.55; }
 
 .possible-location-box {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  width: 100%;
+  gap: 7px;
+  padding-top: 0;
+  margin-top: 0;
 }
 
-.chose_location_back_home {
-  margin-top: 12px;
+.possible-location-box form {
+  background: none !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 100% !important;
+}
+
+.possible-location-box button {
+  width: min(640px, 92vw);
+  padding: 16px 18px;
+  padding-bottom: 15px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+p.error-message { margin: 0; padding: 0; }
+
+.search-form h1 {
+  margin: 0 0 8px 0;
+  padding: 10px;
+  padding-top: 15px;
+  line-height: 1.15;
+}
+
+/* --------------------------------------
+   PHONE LANDSCAPE: Right box scrolls, bottom bar NOT fixed
+------------------------------------------ */
+
+@media (hover: none) and (orientation: landscape) {
+  .right_box {
+    height: var(--vvh, 100dvh) !important;
+    max-height: var(--vvh, 100dvh) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .bottom_section,
+  .bottom_section.results-bottom {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin-top: 12px !important;
+    padding-top: 0 !important;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .weekly_forcast_box {
+    overflow: visible !important;
+    height: auto !important;
+    padding-bottom: 0px !important;
+  }
+
+  .forecast-box { height: fit-content; }
+
+  .forecast-box h3,
+  .forecast-box p {
+    margin: 0 !important;
+    line-height: 1.9;
+  }
+}
+
+/* ---------------------------------------
+   ORIENTATION HINT
+------------------------------------------ */
+
+.orientation-hint {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-top: max(16px, env(safe-area-inset-top));
+  padding-bottom: 12px;
+  pointer-events: none;
+}
+
+.orientation-hint__content {
+  pointer-events: auto;
+  margin: 0 auto;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(20, 20, 25, 0.9), rgba(40, 40, 50, 0.9));
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 500;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.orientation-hint__text {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.orientation-hint__text::before {
+  content: "↻";
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.orientation-hint__close {
+  appearance: none;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.orientation-hint__close:hover { background: rgba(255, 255, 255, 0.18); }
+
+.orientation-hint__close:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 2px;
+}
+
+/* -----------------------------------------
+   HALF-SCREEN / NARROW DESKTOP TWEAKS
+--------------------------------------------- */
+
+@media (max-width: 1100px) {
+  .forecast-box {
+    gap: 6px;
+    padding: 8px 6px;
+    line-height: 0.5;
+  }
+
+  .forecast-box h3 { font-size: 0.95rem; }
+
+  .forecast-box p:last-of-type {
+    font-size: 0.95rem;
+    padding: 0 !important;
+  }
+}
+
+/* --------------------------------------------
+   PHONE-LIKE LANDSCAPE: tighten weekly -> bottom spacing
+-------------------------------------------------- */
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .right_box { justify-content: flex-start !important; }
+
+  .weekly_forecast_box,
+  .weekly_forcast_box {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+    height: auto !important;
+  }
+
+  .bottom_section,
+  .bottom_section.results-bottom {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+
+body.phone-landscape .right_box {
+  justify-content: flex-start !important;
+  gap: 0 !important;
+}
+
+body.phone-landscape .weekly_forecast_box,
+body.phone-landscape .weekly_forcast_box {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+  height: auto !important;
+  flex: 0 0 auto !important;
+}
+
+body.phone-landscape .bottom_section,
+body.phone-landscape .bottom_section.results-bottom {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+body.phone-landscape .day_in_a_week_box {
+  height: auto !important;
+  min-height: 56px;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}
+
+/* ----------------------------------------
+   FAKE LANDSCAPE SAFETY NET (CSS-ONLY FALLBACK)
+--------------------------------------------*/
+
+@media (pointer: coarse) and (orientation: landscape) and (max-width: 900px) and (max-aspect-ratio: 4/3) {
+  .right_box {
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    position: relative !important;
+    width: 100% !important;
+    right: auto !important;
+    top: auto !important;
+  }
+
+  .weekly_forecast_box,
+  .weekly_forcast_box {
+    height: auto !important;
+    flex: 0 0 auto !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .day_in_a_week_box {
+    height: auto !important;
+    min-height: 56px;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  .bottom_section,
+  .bottom_section.results-bottom {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* -----------------------------------------
+   WEATHER FORM PAGE BUTTONS (weather-form-page)
+--------------------------------------------- */
+
+body.weather-form-page #btn-c,
+body.weather-form-page #btn-f {
+  background-color: #3399ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+body.weather-form-page #btn-c.active,
+body.weather-form-page #btn-f.active {
+  background-color: #037bf4;
+}
+
+/* ----------------------------------------
+   MOBILE LANDSCAPE: do NOT use portrait layout rules
+-------------------------------------*/
+
+@media (max-width: 900px) and (pointer: coarse) and (orientation: landscape) {
+  .right_box {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .forecast_container {
+    position: fixed;
+    bottom: 7px;
+    left: 0;
+    width: calc(100vw - 345px);
+    height: 200px;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+    touch-action: pan-x;
+  }
+
+  .forecast-box { height: fit-content !important; }
+}
+
+@media (pointer: coarse) and (orientation: landscape) and (max-width: 900px) {
+  .day_in_a_week_box_words { font-size: 0.92rem; }
+
+  .temp_text_max_min {
+    font-size: 0.92rem;
+    line-height: 1.2;
+  }
+
+  .temp_box_weekly {
+    flex-basis: 88px;
+    min-width: 88px;
+  }
 }

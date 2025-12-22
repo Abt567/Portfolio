@@ -112,3 +112,95 @@ h4 {
   color: #000000;
   margin: 5px;
 }
+
+/* Only style the actual weather search form */
+.search-form {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding-top: 0px;
+  padding-right: 40px;
+  padding-bottom: 30px;
+  padding-left: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
+}
+
+/* Only inputs inside the search form */
+.search-form input,
+.search-form select {
+  width: 100%;
+  padding: 10px;
+  margin: 12px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* Only submit button inside the search form */
+.search-form button[type="submit"] {
+  width: 100%;
+  background-color: #007BFF;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-form button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Choose-location: remove card-style form */
+.possible-location-box form {
+  background: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  width: 100%;
+}
+
+/* Center choose-location layout */
+.possible-location-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  margin-top: 40px;
+}
+
+/* Choose-location buttons */
+.possible-location-box button {
+  width: min(680px, 92vw);
+  padding: 18px 13px;
+  border-radius: 22px;
+  border: none;
+  background: #0d6efd;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 500;
+  cursor: pointer;
+
+  box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.possible-location-box button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+  background: #0b5ed7;
+}
+
+/* Choose-location: center the block in the page */
+.plant_shadow{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+

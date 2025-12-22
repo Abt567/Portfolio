@@ -5,6 +5,23 @@
 
 {% block content %}
 
+{# ===========================
+   Orientation hint (mine.html only)
+   - Non-blocking
+   - Dismissible
+   - Safe-area padding handled in CSS
+   =========================== #}
+<div class="orientation-hint" id="orientationHint" hidden>
+  <div class="orientation-hint__content" role="status" aria-live="polite">
+    <div class="orientation-hint__text">
+      This page looks best in landscape. Rotate your phone for the best layout.
+    </div>
+    <button class="orientation-hint__close" type="button" aria-label="Dismiss">
+      ✕
+    </button>
+  </div>
+</div>
+
 {# ---- Parse sunrise and sunset into 24-hour integers for this city ---- #}
 {% set sr_parts = sunrise.split(' ') %}
 {% set sr_time = sr_parts[0] %}
@@ -122,5 +139,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/results-page.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/results-page.js') }}?v=3" defer></script>
 {% endblock %}

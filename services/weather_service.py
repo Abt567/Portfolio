@@ -12,7 +12,6 @@ SESSION = requests.Session()
 REQUEST_KW = dict(timeout=10)
 
 
-
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
 

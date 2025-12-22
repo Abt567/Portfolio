@@ -1,25 +1,23 @@
-#Python cache
+# Python cache
 __pycache__/
 *.py[cod]
 
-#Virtual environments 
+# Virtual environments
 .venv/
 venv/
-env/
 
-#Environment & secrets
+# Environment & secrets
 .env
-example.env
 
-#Databases
+# Databases
 *.db
 instance/
 
-#Logs & temporary files
+# Logs & temporary files
 *.log
 *.tmp
 
-#OS / Editor junk
+# OS / Editor junk
 .DS_Store
 Thumbs.db
 *.swp
